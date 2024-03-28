@@ -1,4 +1,4 @@
-/* d stands for doomed.  */
+/* d stands for darkened.  */
 
 :root {
   --color-main-0d: #fefefe;
@@ -8,5 +8,6 @@
 
   --color-accent-0d: #fd6f00;
   --color-accent-1d: #e46400;
+  --color-accent-1d-plus: #e60026;
   --color-accent-2d: #ca5900;
 }
