@@ -1,0 +1,14 @@
+body {
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.03em;
+}
+
+h1 {
+  font-size: 4.375rem;
+  font-weight: 900;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
