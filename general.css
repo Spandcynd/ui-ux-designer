@@ -1,0 +1,47 @@
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: 0.1s all;
+  cursor: pointer;
+  letter-spacing: inherit;
+}
+
+.link-primary {
+  color: var(--color-main-0d);
+  background-color: var(--color-accent-0d);
+  border-color: var(--color-accent-0d);
+}
+.link-secondary {
+  color: var(--color-main-2d);
+  background-color: transparent;
+  border-color: var(--color-main-2d);
+}
+.link-primary,
+.link-secondary {
+  font-size: 1.25rem;
+  text-transform: capitalize;
+  border-width: 0.1em;
+  border-style: solid;
+  border-radius: 0.5em;
+  padding: 0.5em 1.9em;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 4.375rem;
+  background-image: linear-gradient(95deg, #984300, #fd6f00 42%, #ca5900);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: inherit;
+  margin-block: 0.34em;
+}
+
+.section-title {
+  margin-bottom: 0.45em;
+  color: var(--color-main-0d);
+}
+.section-subtitle {
+  color: var(--color-main-3d);
+  font-weight: 500;
+  font-size: 1.25em;
+}
