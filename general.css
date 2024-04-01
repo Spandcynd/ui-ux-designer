@@ -45,3 +45,14 @@ h1 {
   font-weight: 500;
   font-size: 1.25em;
 }
+
+header,
+main,
+footer {
+  width: min(100% - 5em, 1280px);
+  margin-inline: auto;
+}
+
+section:not(:first-child) {
+  margin-top: 9.375em;
+}
