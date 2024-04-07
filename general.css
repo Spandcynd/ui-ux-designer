@@ -56,3 +56,8 @@ footer {
 section:not(:first-child) {
   margin-top: 9.375em;
 }
+
+._dropdown {
+  transition: height 0.3s;
+  overflow: hidden;
+}

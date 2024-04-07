@@ -444,7 +444,7 @@
       <section class="portfolio">
         <h2 class="section-title">Portfolio</h2>
         <div class="category-filter">
-          <label><span>All</span><input type="radio" name="category" /></label>
+          <label><span>All</span><input type="radio" name="category" checked /></label>
           <label><span>Website Design</span><input type="radio" name="category" /></label>
           <label><span>App Mobile Design</span><input type="radio" name="category" /></label>
           <label><span>App Desktop</span><input type="radio" name="category" /></label>
@@ -495,7 +495,63 @@
           </div>
         </div>
       </section>
+      <section class="contact-me">
+        <h2 class="section-title">Contact Me</h2>
+        <span class="section-subtitle">Cultivating Connections: Reach Out and Connect with Me</span>
+        <form action="" method="post">
+          <ul class="form-items">
+            <li class="form-item">
+              <label class="form-item__label"><span>Name</span><input type="text" /></label>
+            </li>
+            <li class="form-item">
+              <label class="form-item__label"><span>Email</span><input type="text" /></label>
+            </li>
+            <li class="form-item">
+              <label class="form-item__label"><span>Phone number</span><input type="text" /></label>
+            </li>
+            <li class="form-item form-dropdown">
+              <label class="form-dropdown__header" id="service-of-interest"
+                >Service of interest</label
+              >
+              <div class="form-dropdown__arrow"></div>
+              <div class="form-dropdown__body">
+                <label class="form-dropdown__item">
+                  <span>Webpage design</span>
+                  <input
+                    type="radio"
+                    name="service of interest"
+                    aria-labelledby="service-of-interest" /></label
+                ><br />
+                <label class="form-dropdown__item">
+                  <span>Fonts and icons collections</span>
+                  <input
+                    type="radio"
+                    name="service of interest"
+                    aria-labelledby="service-of-interest" /></label
+                ><br />
+                <label class="form-dropdown__item">
+                  <span>Logos and naming</span>
+                  <input
+                    type="radio"
+                    name="service of interest"
+                    aria-labelledby="service-of-interest"
+                  />
+                </label>
+              </div>
+            </li>
+            <li class="form-item">
+              <label class="form-item__label"><span>Timeline</span><input type="text" /></label>
+            </li>
+            <li class="form-item">
+              <label class="form-item__label"
+                ><span>Project details</span><input type="text"
+              /></label>
+            </li>
+          </ul>
+        </form>
+      </section>
     </main>
     <footer></footer>
+    <script src="script.js"></script>
   </body>
 </html>
