@@ -1,9 +1,9 @@
-const dropdown = document.querySelector('.form-dropdown');
-const dropdownBody = document.querySelector('.form-dropdown__body');
-const dropdownHeader = document.querySelector('.form-dropdown__header');
+const dropdown = document.querySelector('.form-dropdown-item');
+const dropdownBody = document.querySelector('.form-dropdown-item__body');
+const dropdownHeader = document.querySelector('.form-dropdown-item__header');
 
 dropdown.addEventListener('click', (e) => {
-  if (!e.target.closest('.form-dropdown__body')) e.currentTarget.classList.toggle('expanded');
+  if (!e.target.closest('.form-dropdown-item__body')) e.currentTarget.classList.toggle('expanded');
 });
 
 dropdownBody.addEventListener('click', (e) => {

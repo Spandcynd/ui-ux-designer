@@ -6,6 +6,50 @@ a {
   letter-spacing: inherit;
 }
 
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-image: linear-gradient(to right, var(--color-accent-0d), var(--color-accent-1d-plus));
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.main-nav {
+  color: var(--color-main-2d);
+  font-size: 1.25rem;
+}
+.main-nav ul {
+  display: flex;
+}
+.main-nav li {
+  font-weight: 500;
+}
+.main-nav li:not(:last-child) {
+  margin-right: 3em;
+}
+.main-nav a:focus,
+.main-nav a:hover {
+  color: var(--color-accent-0d);
+  text-shadow: 1px 0 var(--color-accent-0d);
+}
+
+.socials {
+  display: flex;
+}
+.socials a {
+  line-height: 0;
+}
+.socials a:not(:last-child) {
+  margin-right: 20px;
+}
+/* modifier for fixing content overlap, which located right next to bottom side of links (if such content present)
+  Currently unused, because current layout has margins between links and following content 
+*/
+.socials_padded a {
+  padding-bottom: 13px;
+}
+
 .link-primary {
   color: var(--color-main-0d);
   background-color: var(--color-accent-0d);
@@ -46,9 +90,7 @@ h1 {
   font-size: 1.25em;
 }
 
-header,
-main,
-footer {
+.container {
   width: min(100% - 5em, 1280px);
   margin-inline: auto;
 }
