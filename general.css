@@ -49,19 +49,24 @@ a {
 .socials_padded a {
   padding-bottom: 13px;
 }
+.socials svg {
+  width: 2.5em;
+  aspect-ratio: 0.9756;
+}
 
-.link-primary {
+.buttonlink-primary {
   color: var(--color-main-0d);
   background-color: var(--color-accent-0d);
   border-color: var(--color-accent-0d);
 }
-.link-secondary {
+.buttonlink-secondary {
   color: var(--color-main-2d);
   background-color: transparent;
   border-color: var(--color-main-2d);
 }
-.link-primary,
-.link-secondary {
+.buttonlink-primary,
+.buttonlink-secondary {
+  display: inline-block;
   font-size: 1.25rem;
   text-transform: capitalize;
   border-width: 0.1em;
