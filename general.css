@@ -1,4 +1,5 @@
-a {
+a,
+button {
   color: inherit;
   text-decoration: none;
   transition: 0.1s all;
@@ -34,6 +35,7 @@ a {
   text-shadow: 1px 0 var(--color-accent-0d);
 }
 
+/* Socials ======================================================================== */
 .socials {
   display: flex;
 }
@@ -43,26 +45,90 @@ a {
 .socials a:not(:last-child) {
   margin-right: 20px;
 }
-/* modifier for fixing content overlap, which located right next to bottom side of links (if such content present)
-  Currently unused, because current layout has margins between links and following content 
-*/
-.socials_padded a {
-  padding-bottom: 13px;
-}
 .socials svg {
   width: 2.5em;
-  aspect-ratio: 0.9756;
 }
+a > :where(.svg-instagram, .svg-linkedin, .svg-ball, .svg-beryllium) {
+  aspect-ratio: 0.9756;
+  & circle {
+    fill: white;
+    fill-opacity: 0.04;
+    stroke: var(--color-main-4d);
+  }
+}
+
+.svg-instagram {
+  & path {
+    fill: var(--color-main-1d-plus-x3);
+  }
+}
+a:has(> .svg-instagram):where(:hover, :focus) {
+  & path {
+    fill: white;
+  }
+}
+
+.svg-linkedin {
+  & path {
+    fill: var(--color-main-1d-plus-x3);
+  }
+}
+a:has(> .svg-linkedin):where(:hover, :focus) {
+  & path {
+    fill: white;
+  }
+}
+
+.svg-ball {
+  & path {
+    stroke: var(--color-main-1d-plus-x3);
+  }
+}
+a:has(> .svg-ball):where(:hover, :focus) {
+  & path {
+    stroke: white;
+  }
+}
+
+.svg-beryllium {
+  & path {
+    fill: var(--color-main-1d-plus-x3);
+  }
+}
+a:has(> .svg-beryllium):where(:hover, :focus) {
+  & path {
+    fill: white;
+  }
+}
+
+a:where(:hover, :focus) {
+  scale: 1.03;
+  & > :is(.svg-instagram, .svg-linkedin, .svg-ball, .svg-beryllium) {
+    circle {
+      stroke: white;
+    }
+  }
+}
+
+/* ==== end ===== Socials =================================================================== */
 
 .buttonlink-primary {
   color: var(--color-main-0d);
   background-color: var(--color-accent-0d);
   border-color: var(--color-accent-0d);
+  &:where(:hover, :focus) {
+    scale: 1.03;
+  }
 }
 .buttonlink-secondary {
   color: var(--color-main-2d);
   background-color: transparent;
   border-color: var(--color-main-2d);
+  &:where(:hover, :focus) {
+    scale: 1.03;
+    border-color: white;
+    color: white;
+  }
 }
 .buttonlink-primary,
 .buttonlink-secondary {
@@ -75,14 +141,21 @@ a {
   padding: 0.5em 1.9em;
   font-weight: 700;
 }
+@media (max-width: 640px) {
+  .buttonlink-primary,
+  .buttonlink-secondary {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+}
 
 h1 {
+  display: inline-block;
   font-size: 4.375rem;
+  margin-block: 0.48em;
   background-image: linear-gradient(95deg, #984300, #fd6f00 42%, #ca5900);
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: inherit;
-  margin-block: 0.34em;
 }
 
 .section-title {
@@ -105,6 +178,5 @@ section:not(:first-child) {
 }
 
 ._dropdown {
-  transition: height 0.3s;
   overflow: hidden;
 }

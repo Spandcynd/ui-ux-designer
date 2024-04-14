@@ -1,11 +1,11 @@
-/* d stands for darkened.  */
-
 :root {
+  /* colors */
+  /* d stands for darkened.  */
   --color-main-0d: #fefefe;
   --color-main-1d: #dfdfdf;
   --color-main-1d-plus: #d9d9d9;
-  --color-main-1d-plus-x2: #bababa;
-  --color-main-1d-plus-x3: #c6c6c6;
+  --color-main-1d-plus-x2: #c6c6c6;
+  --color-main-1d-plus-x3: #bababa;
   --color-main-2d: #959595;
   --color-main-3d: #707070;
   --color-main-4d: #575757;
