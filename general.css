@@ -197,9 +197,19 @@ h1 {
     width: calc(100% - 3em);
   }
 }
+@media (max-width: 390px) {
+  .container {
+    width: calc(100% - 1em);
+  }
+}
 
-section:not(:first-child) {
+section {
   margin-top: 9.375em;
+}
+@media (max-width: 800px) {
+  section {
+    margin-top: 6.25em;
+  }
 }
 
 ._dropdown {

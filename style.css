@@ -79,6 +79,10 @@ header .container {
   width: 100%;
   box-sizing: border-box;
 }
+.main-nav-burger__main-nav-links a.hire-me {
+  display: none;
+  color: var(--color-accent-1d);
+}
 .main-nav-burger__main-nav-links a:where(:hover, :focus) {
   color: var(--color-main-1d);
 }
@@ -89,6 +93,14 @@ header .container {
   }
   header .main-nav-burger {
     display: block;
+  }
+}
+@media (max-width: 640px) {
+  header .buttonlink-primary {
+    display: none;
+  }
+  .main-nav-burger__main-nav-links a.hire-me {
+    display: inline-block;
   }
 }
 
@@ -112,12 +124,14 @@ main {
   margin-top: 3.4em;
   position: relative;
   flex: 0 1 60ch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .hero__first-block::before {
   content: url('capitosh.svg');
   display: block;
   width: 100%;
-  height: 100%;
   position: absolute;
   z-index: -1;
   opacity: 0.04;
@@ -136,17 +150,15 @@ main {
   display: inline-block;
   margin-top: 0.4em;
 }
-.hero h1 {
-  width: fit-content;
-}
-
-.hero .buttonlink-primary {
-  margin-right: 1.2em;
+.hero .buttonlinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2em;
 }
 
 .hero .socials {
   margin-bottom: 3.8125em;
-  display: inline-block;
 }
 
 .achivements {
@@ -189,7 +201,7 @@ main {
   border-radius: 50%;
   position: relative;
   margin-top: 18.3%;
-  height: 100%;
+  aspect-ratio: 1;
   background-color: var(--color-background-1d);
 }
 .hero__image::after {
@@ -220,11 +232,12 @@ main {
     align-items: center;
   }
   .hero__first-block {
-    text-align: center;
+    align-items: center;
     flex: 0 1 auto;
+    margin-top: 0;
   }
   .achivements {
-    text-align: start;
+    flex-wrap: wrap;
   }
   .hero__second-block {
     flex: 0 1 400px;
@@ -248,9 +261,32 @@ main {
   }
   h1 {
     font-size: 3.125rem;
+    text-align: center;
   }
+
   .achivements {
-    font-size: 0.8125rem;
+    margin-top: 3.125em;
+    padding: 1em;
+  }
+  .achivements__achivement {
+    padding-block: 0.375em;
+  }
+  .achivements__achivement:not(:last-child) {
+    padding-right: 1em;
+    margin-right: 0.875em;
+  }
+
+  .achivement__value {
+    color: var(--color-accent-0d);
+    font-size: 1.25em;
+    font-weight: 800;
+    margin-bottom: 0.5em;
+  }
+
+  .achivement__name {
+    color: var(--color-main-1d);
+    font-size: 1em;
+    font-weight: 700;
   }
 }
 
@@ -279,7 +315,7 @@ main {
   line-height: 1.6;
 }
 .services__card-icon {
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
   width: 3.6em;
 }
 .services__card-icon,
@@ -304,13 +340,15 @@ main {
 
   .services__cards {
     grid-template-columns: repeat(auto-fill, minmax(20ch, auto));
+    gap: 1em;
   }
   .services__card {
-    padding: 1.0625em 1.875em;
+    padding: 1.875em 1em;
+    border-radius: 1em;
   }
   .services__card-icon {
     width: 1.769em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0;
   }
   .services__card-name {
     font-size: 1.25rem;
@@ -872,3 +910,11 @@ footer .credentials::before {
     font-size: 0.875rem;
   }
 }
+
+/* .container {
+  border: 1px solid orange;
+} */
+
+/* * {
+  outline: 1px solid orangered !important;
+} */
