@@ -3,15 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="stylesheet" href="reset.css" />
     <link rel="stylesheet" href="variables.css" />
     <link rel="stylesheet" href="https://use.typekit.net/ewm8uks.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="typography.css" />
     <link rel="stylesheet" href="general.css" />
     <link rel="stylesheet" href="style.css" />
+
     <title>UI/UX Designer</title>
   </head>
-  <body>
+  <body id="body">
     <header>
       <div class="container">
         <div class="main-nav-burger">
@@ -23,12 +29,12 @@
           <div class="position-relative">
             <nav class="main-nav-burger__main-nav">
               <ul class="main-nav-burger__main-nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">About me</a></li>
-                <li><a href="#">Portfolio</a></li>
-                <li><a href="#">Contact me</a></li>
-                <li><a href="#" class="hire-me">Hire me</a></li>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about-me">About me</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact-me">Contact me</a></li>
+                <li><a href="https://warthunder.com/ua" class="hire-me">Hire me</a></li>
               </ul>
             </nav>
           </div>
@@ -36,11 +42,11 @@
         <div class="logo">logo</div>
         <nav class="main-nav">
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">About me</a></li>
-            <li><a href="#">Portfolio</a></li>
-            <li><a href="#">Contact me</a></li>
+            <li><a href="#body">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about-me">About me</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact-me">Contact me</a></li>
           </ul>
         </nav>
         <a class="buttonlink-primary">hire me</a>
@@ -153,7 +159,7 @@
                 </div>
                 <div class="achivements__achivement">
                   <div class="achivement__value">20+</div>
-                  <div class="achivement__name">Projets done</div>
+                  <div class="achivement__name">Projects done</div>
                 </div>
                 <div class="achivements__achivement">
                   <div class="achivement__value">80+</div>
@@ -166,7 +172,7 @@
             </div>
           </div>
         </section>
-        <section class="services">
+        <section class="services" id="services">
           <h2 class="section-title">Services</h2>
           <span class="section-subtitle"
             >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas exercitationem nam
@@ -300,7 +306,7 @@
             </div>
           </div>
         </section>
-        <section class="about-me">
+        <section class="about-me" id="about-me">
           <h2 class="section-title">About Me</h2>
           <span class="section-subtitle"
             >User Interface and User Experience and Also video editing</span
@@ -410,61 +416,75 @@
             </div>
           </div>
         </section>
-        <section class="portfolio">
+        <section class="portfolio" id="portfolio">
           <h2 class="section-title">Portfolio</h2>
           <div class="category-filter">
-            <label><span>All</span><input type="radio" name="category" checked /></label>
-            <label><span>Website Design</span><input type="radio" name="category" /></label>
-            <label><span>App Mobile Design</span><input type="radio" name="category" /></label>
-            <label><span>App Desktop</span><input type="radio" name="category" /></label>
-            <label><span>Braiding</span><input type="radio" name="category" /></label>
+            <label class="category bg-transition_bef" data-category="all"
+              ><span>All</span><input type="radio" name="category" checked
+            /></label>
+            <label class="category bg-transition_bef" data-category="Website Design"
+              ><span>Website Design</span><input type="radio" name="category"
+            /></label>
+            <label class="category bg-transition_bef" data-category="App Mobile Design"
+              ><span>App Mobile Design</span><input type="radio" name="category"
+            /></label>
+            <label class="category bg-transition_bef" data-category="App Desktop"
+              ><span>App Desktop</span><input type="radio" name="category"
+            /></label>
+            <label class="category bg-transition_bef" data-category="Braiding"
+              ><span>Braiding</span><input type="radio" name="category"
+            /></label>
           </div>
-          <div class="portfolio-projects">
-            <div class="portfolio-project">
-              <div class="portfolio-project__image"></div>
-              <div class="portfolio-project__text-zone">
-                <span class="portfolio-project__name">Project Name</span>
-                <span class="portfolio-project__category">Category</span>
-              </div>
-            </div>
-            <div class="portfolio-project">
-              <div class="portfolio-project__image"></div>
-              <div class="portfolio-project__text-zone">
-                <span class="portfolio-project__name">Project Name</span>
-                <span class="portfolio-project__category">Category</span>
-              </div>
-            </div>
-            <div class="portfolio-project">
-              <div class="portfolio-project__image"></div>
-              <div class="portfolio-project__text-zone">
-                <span class="portfolio-project__name">Project Name</span>
-                <span class="portfolio-project__category">Category</span>
-              </div>
-            </div>
-            <div class="portfolio-project">
-              <div class="portfolio-project__image"></div>
-              <div class="portfolio-project__text-zone">
-                <span class="portfolio-project__name">Project Name</span>
-                <span class="portfolio-project__category">Category</span>
-              </div>
-            </div>
-            <div class="portfolio-project">
-              <div class="portfolio-project__image"></div>
-              <div class="portfolio-project__text-zone">
-                <span class="portfolio-project__name">Project Name</span>
-                <span class="portfolio-project__category">Category</span>
-              </div>
-            </div>
-            <div class="portfolio-project">
-              <div class="portfolio-project__image"></div>
-              <div class="portfolio-project__text-zone">
-                <span class="portfolio-project__name">Project Name</span>
-                <span class="portfolio-project__category">Category</span>
+          <div class="swiper">
+            <div class="portfolio-projects swiper-wrapper">
+              <portfolio-project
+                class="portfolio-project swiper-slide"
+                data-category="Website Design"
+                ><img src="project1.png" alt="web project" slot="image" />
+                <span slot="name">Project 1</span>
+                <span slot="category">Website Design</span>
+              </portfolio-project>
+              <portfolio-project class="portfolio-project swiper-slide" data-category="App Desktop"
+                ><img src="project2.png" alt="web project" slot="image" />
+                <span slot="name">Project 2</span>
+                <span slot="category">App Desktop</span>
+              </portfolio-project>
+              <portfolio-project
+                class="portfolio-project swiper-slide"
+                data-category="App Mobile Design"
+                ><img src="project3.png" alt="web project" slot="image" />
+                <span slot="name">Project 3</span>
+                <span slot="category">App Mobile Design</span>
+              </portfolio-project>
+              <portfolio-project
+                class="portfolio-project swiper-slide"
+                data-category="App Mobile Design"
+                ><img src="project1.png" alt="web project" slot="image" />
+                <span slot="name">Project 4</span>
+                <span slot="category">App Mobile Design</span>
+              </portfolio-project>
+              <portfolio-project
+                class="portfolio-project swiper-slide"
+                data-category="App Mobile Design"
+                ><img src="project2.png" alt="web project" slot="image" />
+                <span slot="name">Project 5</span>
+                <span slot="category">App Mobile Design</span>
+              </portfolio-project>
+              <portfolio-project
+                class="portfolio-project swiper-slide"
+                data-category="App Mobile Design"
+                ><img src="project3.png" alt="web project" slot="image" />
+                <span slot="name">Project 6</span>
+                <span slot="category">App Mobile Design</span>
+              </portfolio-project>
+              <div class="terminator">
+                <div class="terminator__smile">:(</div>
+                <div class="terminator__text">projects not found</div>
               </div>
             </div>
           </div>
         </section>
-        <section class="contact-me">
+        <section class="contact-me" id="contact-me">
           <h2 class="section-title">Contact Me</h2>
           <span class="section-subtitle"
             >Cultivating Connections: Reach Out and Connect with Me</span
@@ -537,11 +557,11 @@
         <div class="logo">logo</div>
         <nav class="main-nav">
           <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">About me</a></li>
-            <li><a href="#">Portfolio</a></li>
-            <li><a href="#">Contact me</a></li>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#about-me">About me</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact-me">Contact me</a></li>
           </ul>
         </nav>
         <div class="socials">
@@ -658,6 +678,7 @@
         <div class="credentials">Designed by @mahmood.fazile UI/UX designer</div>
       </div>
     </footer>
-    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js" type="module"></script>
   </body>
 </html>

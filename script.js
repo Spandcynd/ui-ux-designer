@@ -28,3 +28,59 @@
     mainNav.classList.toggle('active');
   });
 })();
+
+(function () {
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', (e) => {
+    header.classList.toggle('sticky', window.scrollY > 0);
+  });
+})();
+
+(function () {
+  const bp = matchMedia('(max-width: 540px)');
+  let swiper, initialized;
+  bp.addEventListener('change', (e) => {
+    if (e.matches && !initialized) {
+      swiper = new Swiper('.swiper', {
+        spaceBetween: '16px',
+        slidesPerView: 1.3,
+        centeredSlides: true,
+        centeredSlidesBounds: true,
+      });
+      initialized = true;
+    } else if (!e.matches && initialized) {
+      swiper.destroy();
+      initialized = false;
+    }
+  });
+})();
+
+// project category selection
+(function () {
+  const projectsContainer = document.querySelector('.portfolio-projects');
+  const portfolioProjects = Array.from(
+    document.querySelectorAll('.portfolio-projects .portfolio-project'),
+  );
+  document.querySelectorAll('.category').forEach((category) => {
+    category.addEventListener('input', () => {
+      const choosenCategory = category.dataset.category;
+      let presence = false;
+      if (choosenCategory === 'all' && portfolioProjects.length) {
+        portfolioProjects.forEach((proj) => (proj.style.display = 'block'));
+        presence = true;
+      } else {
+        portfolioProjects.forEach((proj) => {
+          if (proj.dataset.category === choosenCategory) {
+            proj.style.display = 'block';
+            presence = true;
+          } else {
+            proj.style.display = 'none';
+          }
+        });
+      }
+      projectsContainer.classList.toggle('portfolio-projects_empty', !presence);
+    });
+  });
+})();
+
+import './portfolio-project.js';

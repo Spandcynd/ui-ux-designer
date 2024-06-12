@@ -7,6 +7,13 @@ button {
   letter-spacing: inherit;
 }
 
+button,
+a,
+input,
+label {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .logo {
   font-size: 2rem;
   font-weight: 700;
@@ -14,6 +21,7 @@ button {
   background-image: linear-gradient(to right, var(--color-accent-0d), var(--color-accent-1d-plus));
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  user-select: none;
 }
 
 .main-nav {
@@ -214,4 +222,26 @@ section {
 
 ._dropdown {
   overflow: hidden;
+}
+
+/* transition of any background except color
+  bef means that this element uses ::before pseudoelement
+*/
+.bg-transition_bef {
+}
+.bg-transition_bef::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  opacity: 0;
+  transition: all 0.2s;
+}
+.bg-transition_bef > * {
+  position: relative;
 }
