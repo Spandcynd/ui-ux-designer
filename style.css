@@ -674,8 +674,11 @@ main {
     calc((100% / var(--columns)) - var(--gap) * (var(--columns) - 1) / var(--columns))
   );
 }
-.terminator {
+.portfolio-project.hidden {
   display: none;
+}
+
+.terminator {
   color: var(--color-main-4d);
   border-radius: 5px;
   padding: 3em;
@@ -689,12 +692,8 @@ main {
   font-size: 2rem;
 }
 
-.portfolio-projects_empty {
-  grid-template-columns: 1fr;
-  justify-items: center;
-  & .terminator {
-    display: block;
-  }
+.portfolio-project:not(.hidden) ~ .terminator {
+  display: none;
 }
 
 @media (max-width: 1050px) {

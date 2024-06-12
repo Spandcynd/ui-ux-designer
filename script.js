@@ -57,28 +57,25 @@
 
 // project category selection
 (function () {
-  const projectsContainer = document.querySelector('.portfolio-projects');
   const portfolioProjects = Array.from(
     document.querySelectorAll('.portfolio-projects .portfolio-project'),
   );
   document.querySelectorAll('.category').forEach((category) => {
     category.addEventListener('input', () => {
       const choosenCategory = category.dataset.category;
-      let presence = false;
-      if (choosenCategory === 'all' && portfolioProjects.length) {
-        portfolioProjects.forEach((proj) => (proj.style.display = 'block'));
-        presence = true;
+      if (choosenCategory === 'all') {
+        portfolioProjects.forEach((proj) => {
+          proj.classList.remove('hidden');
+        });
       } else {
         portfolioProjects.forEach((proj) => {
           if (proj.dataset.category === choosenCategory) {
-            proj.style.display = 'block';
-            presence = true;
+            proj.classList.remove('hidden');
           } else {
-            proj.style.display = 'none';
+            proj.classList.add('hidden');
           }
         });
       }
-      projectsContainer.classList.toggle('portfolio-projects_empty', !presence);
     });
   });
 })();
