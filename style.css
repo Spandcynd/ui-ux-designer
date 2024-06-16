@@ -684,6 +684,7 @@ main {
   padding: 3em;
   background-color: var(--color-background-1d);
   width: fit-content;
+  margin-inline: auto;
 }
 .terminator__smile {
   font-size: 1.5rem;
@@ -692,7 +693,7 @@ main {
   font-size: 2rem;
 }
 
-.portfolio-project:not(.hidden) ~ .terminator {
+.swiper:has(.portfolio-project:not(.hidden)) .terminator {
   display: none;
 }
 
@@ -712,6 +713,15 @@ main {
   .portfolio-projects {
     display: flex;
     --gap: 0;
+  }
+
+  .portfolio-projects.not-enough-slides {
+    display: block;
+
+    & .portfolio-project {
+      width: fit-content;
+      margin-inline: auto;
+    }
   }
 }
 

@@ -4,7 +4,8 @@ template.innerHTML = `
   .project {
     font-weight: 700;
     line-height: 1.6;
-    border-radius: 1.75em;
+    border-radius: 1.75em 1.75em 1em 1em;
+    overflow: hidden;
   }
   ::slotted(img) {
     max-width: 100%;
@@ -17,7 +18,6 @@ template.innerHTML = `
     background-color: var(
       --color-background-0d
     ); /* originally was white with 0.08 opacity */
-    border-radius: 0 0 1em 1em;
   }
   .project-name {
     color: var(--color-main-1d-plus-x2);
