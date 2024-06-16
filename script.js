@@ -46,6 +46,7 @@
   */
   function updateSwiper(options) {
     if (bp.matches && !options?.destroy) {
+      swiper?.destroy();
       swiper = new Swiper('.swiper', {
         spaceBetween: '16px',
         slidesPerView: 1.3,

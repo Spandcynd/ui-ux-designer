@@ -36,7 +36,7 @@ header .container {
 }
 header.sticky .container {
   margin-top: 0;
-  padding: 1em;
+  padding-block: 1em;
 }
 
 .main-nav-burger {
@@ -660,9 +660,6 @@ main {
   display: none;
 }
 
-.swiper {
-  overflow: visible;
-}
 .portfolio-projects {
   margin-top: 4.375em;
   display: grid;
@@ -713,15 +710,6 @@ main {
   .portfolio-projects {
     display: flex;
     --gap: 0;
-  }
-
-  .portfolio-projects.not-enough-slides {
-    display: block;
-
-    & .portfolio-project {
-      width: fit-content;
-      margin-inline: auto;
-    }
   }
 }
 
