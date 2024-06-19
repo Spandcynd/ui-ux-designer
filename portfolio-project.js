@@ -7,9 +7,12 @@ template.innerHTML = `
     border-radius: 1.75em 1.75em 1em 1em;
     overflow: hidden;
   }
-  ::slotted(img) {
-    max-width: 100%;
+
+  .image-container {
+    background-size: cover;
+    background-repear: no-repeat;
   }
+ 
   .text-container {
     display: flex;
     justify-content: space-between;
@@ -46,10 +49,18 @@ template.innerHTML = `
 window.customElements.define(
   'portfolio-project',
   class extends HTMLElement {
+    #imageContainer = null;
+    static observedAttributes = ['data-back-img'];
+
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.appendChild(template.content.cloneNode(true));
+      this.#imageContainer = this.shadowRoot.querySelector('.image-container');
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      this.#imageContainer.style.backgroundImage = 'url(' + newValue + ')';
     }
   },
 );

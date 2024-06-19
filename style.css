@@ -575,7 +575,7 @@ main {
   stroke-width: 0.8125em;
   transform-origin: center;
   transform: rotate(-90deg);
-  stroke-linecap: round;
+  stroke-linecap: butt;
   --full-len: calc(3.14158 * (8.125em - 0.8125em));
   stroke-dasharray: calc(var(--full-len) * var(--percentage)), 999999;
   stroke-dashoffset: calc(-1 * var(--full-len) + var(--full-len) * var(--percentage));
@@ -624,6 +624,7 @@ main {
   justify-content: center;
   flex-wrap: wrap;
 }
+
 .category-filter label {
   background-color: var(--color-background-0d);
   padding: 0.875em 2.5em;
@@ -671,6 +672,9 @@ main {
     calc((100% / var(--columns)) - var(--gap) * (var(--columns) - 1) / var(--columns))
   );
 }
+.portfolio-project img {
+  max-width: 100%;
+}
 .portfolio-project.hidden {
   display: none;
 }
@@ -710,6 +714,10 @@ main {
   .portfolio-projects {
     display: flex;
     --gap: 0;
+  }
+  .swiper:not(.swiper-initialized) .portfolio-project {
+    width: 90%;
+    margin-inline: auto;
   }
 }
 

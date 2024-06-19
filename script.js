@@ -1,17 +1,36 @@
 // dropdown in contact-me section form
 (function () {
   const dropdown = document.querySelector('.form-dropdown-item');
+  const dropdownItems = document.querySelectorAll('.form-dropdown-item__item');
   const dropdownBody = document.querySelector('.form-dropdown-item__body');
   const dropdownHeader = document.querySelector('.form-dropdown-item__header');
+  const inputs = Array.from(dropdownBody.querySelectorAll('input'));
 
-  dropdown.addEventListener('click', (e) => {
-    if (!e.target.closest('.form-dropdown-item__body'))
+  function updateDropdownTabIndexes() {
+    if (dropdown.classList.contains('expanded')) {
+      dropdownItems.forEach((input) => input.setAttribute('tabindex', '0'));
+    } else {
+      dropdownItems.forEach((input) => input.setAttribute('tabindex', ''));
+    }
+  }
+
+  function handleDropdown(e) {
+    if (!e.target.closest('.form-dropdown-item__body')) {
       e.currentTarget.classList.toggle('expanded');
+      updateDropdownTabIndexes();
+    }
+  }
+  dropdown.addEventListener('click', (e) => {
+    handleDropdown(e);
+  });
+  dropdown.addEventListener('keyup', (e) => {
+    if (e.code === 'Tab') {
+      handleDropdown(e);
+    }
   });
 
-  dropdownBody.addEventListener('click', (e) => {
-    const inputs = dropdownBody.querySelectorAll('input');
-    const input = Array.from(inputs).find((input) => input === e.target);
+  dropdownBody.addEventListener('input', (e) => {
+    const input = inputs.includes(e.target) ? e.target : undefined;
     if (input) {
       dropdownHeader.textContent = input.previousElementSibling.textContent;
       dropdown.classList.remove('expanded');
