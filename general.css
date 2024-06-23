@@ -245,3 +245,17 @@ section {
 .bg-transition_bef > * {
   position: relative;
 }
+
+.block-screen {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #121212e8;
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  &.hidden {
+    display: none;
+  }
+}

@@ -112,3 +112,19 @@
     });
   });
 })();
+
+// setup modals
+(function () {
+  const skills = Array.from(document.querySelectorAll('.skill'));
+  skills.forEach((skill) => {
+    const modal = skill.querySelector('.modal-skill');
+    const closeBtn = skill.querySelector('.modal-skill__close-btn');
+    skill.addEventListener('click', (e) => {
+      modal.showModal();
+    });
+    closeBtn.addEventListener('click', (e) => {
+      modal.close();
+      e.stopPropagation();
+    });
+  });
+})();

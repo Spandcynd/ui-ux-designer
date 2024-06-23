@@ -508,34 +508,34 @@ main {
   gap: 2em 1em;
   justify-items: center;
 }
-.about-me__skill {
+.skill {
   width: fit-content;
   text-align: center;
 }
-.about-me__skill:nth-child(1) {
+.skill:nth-child(1) {
   --percentage: 1;
 }
-.about-me__skill:nth-child(2) {
+.skill:nth-child(2) {
   --percentage: 1;
 }
-.about-me__skill:nth-child(3) {
+.skill:nth-child(3) {
   --percentage: 0.85;
 }
-.about-me__skill:nth-child(4) {
+.skill:nth-child(4) {
   --percentage: 0.6;
 }
-.about-me__skill:nth-child(5) {
+.skill:nth-child(5) {
   --percentage: 0.7;
 }
 
-.about-me__svg-container {
+.skill__svg-container {
   position: relative;
   margin-inline: auto;
   width: fit-content;
   line-height: 0;
   margin-bottom: 0.8em;
 }
-.about-me__svg-container::after {
+.skill__svg-container::after {
   content: '';
   position: absolute;
   width: 38%;
@@ -546,31 +546,31 @@ main {
   mask: center / contain no-repeat;
   background-color: var(--color-main-2d);
 }
-.about-me__skill:nth-child(1) .about-me__svg-container::after {
+.skill:nth-child(1) .skill__svg-container::after {
   mask-image: url('figma.svg');
 }
-.about-me__skill:nth-child(2) .about-me__svg-container::after {
+.skill:nth-child(2) .skill__svg-container::after {
   mask-image: url('adobexd.svg');
 }
-.about-me__skill:nth-child(3) .about-me__svg-container::after {
+.skill:nth-child(3) .skill__svg-container::after {
   mask-image: url('photoshop.svg');
 }
-.about-me__skill:nth-child(4) .about-me__svg-container::after {
+.skill:nth-child(4) .skill__svg-container::after {
   mask-image: url('illustrator.svg');
 }
-.about-me__skill:nth-child(5) .about-me__svg-container::after {
+.skill:nth-child(5) .skill__svg-container::after {
   mask-image: url('premiere.svg');
 }
-.about-me__svg-container svg {
+.skill__svg-container svg {
   width: 8.125em;
   height: 8.125em;
 }
-.about-me__svg-container circle.back {
+.skill__svg-container circle.back {
   stroke: var(--color-main-1d-plus);
   opacity: 0.2;
   stroke-width: 0.8125em;
 }
-.about-me__svg-container circle.front {
+.skill__svg-container circle.front {
   stroke: var(--color-accent-0d);
   stroke-width: 0.8125em;
   transform-origin: center;
@@ -581,7 +581,7 @@ main {
   stroke-dashoffset: calc(-1 * var(--full-len) + var(--full-len) * var(--percentage));
 }
 
-.about-me__value {
+.skill__value {
   background-image: linear-gradient(95deg, var(--color-accent-0d), var(--color-accent-1d));
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -589,7 +589,7 @@ main {
   font-weight: 700;
   line-height: 1.6;
 }
-.about-me__name {
+.skill__name {
   color: var(--color-main-2d);
   font-size: 1.5rem;
   font-weight: 700;
@@ -597,15 +597,68 @@ main {
   white-space: nowrap;
 }
 
+.modal-skill {
+  font-size: 1rem;
+  padding: 1em;
+  background-color: #121212e8;
+  max-width: 40ch;
+  box-shadow: 0 3px 3px black;
+  border: none;
+  backdrop-filter: blur(5px);
+}
+.modal-skill__wrapper {
+  display: flex;
+  justify-content: center;
+}
+.modal-skill__name {
+  color: var(--color-accent-0d);
+}
+.modal-skill__separator {
+  color: var(--color-main-1d);
+  margin-inline: 0.5em;
+  font-weight: 800;
+}
+.modal-skill__value {
+  color: var(--color-accent-0d);
+}
+.modal-skill__description {
+  margin-top: 0.75em;
+  color: var(--color-main-1d);
+  letter-spacing: 0.05em;
+  max-height: 15em;
+  overflow-y: auto;
+  padding-bottom: 0.2em; /* fix for unwanted small scroll*/
+
+  &::-webkit-scrollbar {
+    width: 0.5ch;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: var(--color-main-4d);
+  }
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-0d);
+  }
+}
+.modal-skill__close-btn {
+  padding: 0.25em 0.5em;
+  color: var(--color-main-1d);
+  font: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  text-decoration: underline;
+}
+
 @media (max-width: 640px) {
   .about-me__skills {
     font-size: 0.7rem;
     grid-template-columns: repeat(auto-fit, minmax(26ch, 1fr));
   }
-  .about-me__value {
+  .skill__value {
     font-size: 1.5rem;
   }
-  .about-me__name {
+  .skill__name {
     font-size: 1.25rem;
   }
 }
