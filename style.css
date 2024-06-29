@@ -811,6 +811,10 @@ form {
   color: var(--color-main-2d);
   --line-height: 1.6;
   line-height: var(--line-height);
+
+  &:focus-within {
+    outline: 1px solid var(--color-main-1d);
+  }
 }
 .form-item__label {
   display: flex;
@@ -835,16 +839,16 @@ form {
 }
 
 .form-dropdown-item {
-  position: relative;
-  overflow: hidden;
+  transition: box-shadow 0.4s;
+  box-shadow: 0 8px 3px transparent;
+}
+.form-dropdown-item.expanded {
+  box-shadow: 0 8px 3px rgba(0, 0, 0, 0.356);
+}
+.form-dropdown-item__panel {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.form-dropdown-item.expanded {
-  overflow: visible;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 .form-dropdown-item__arrow::before,
@@ -873,22 +877,27 @@ form {
   transform: rotate(45deg) translateX(-0.3em);
 }
 
-.form-dropdown-item__header:has(~ .form-dropdown-item__body :checked) {
+.form-dropdown-item__panel:has(~ .form-dropdown-item__body-outer-wrapper :checked) {
   color: white;
 }
-.form-dropdown-item__body {
-  position: absolute;
-  bottom: 0;
-  transform: translateY(100%);
-  left: 0;
-  background-color: var(--color-background-1d);
-  padding: 0 var(--hor-padding) 0.875em;
-  border-radius: 0 0 0.5em 0.5em;
-  box-sizing: border-box;
-  width: 100%;
+.form-dropdown-item__body-outer-wrapper {
+  display: flex;
 }
+.form-dropdown-item__body-inner-wrapper {
+  flex: auto;
+}
+.form-dropdown-item__body {
+  /* width: calc(100% - var(--hor-padding) * 2); */
+  margin-inline: auto;
+  /* text-align: right; */
+  max-height: 0;
+  overflow: hidden;
+  background-color: var(--color-background-1d);
+  transition: max-height 0.2s;
+}
+
 .form-dropdown-item.expanded .form-dropdown-item__body {
-  box-shadow: 0 8px 3px rgba(0, 0, 0, 0.356);
+  max-height: 100%;
 }
 .form-dropdown-item__body-header {
   display: inline-block;
@@ -897,8 +906,7 @@ form {
 .form-dropdown-item__item input {
   display: none;
 }
-.form-dropdown-item__item:has(input:checked),
-.form-dropdown-item__item:hover {
+.form-dropdown-item__item:is(:has(input:checked), :hover, :focus) {
   color: white;
 }
 

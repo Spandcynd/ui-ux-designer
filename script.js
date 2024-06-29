@@ -1,40 +1,61 @@
 // dropdown in contact-me section form
 (function () {
+  const formItems = document.querySelector('.form-items');
   const dropdown = document.querySelector('.form-dropdown-item');
   const dropdownItems = document.querySelectorAll('.form-dropdown-item__item');
   const dropdownBody = document.querySelector('.form-dropdown-item__body');
   const dropdownHeader = document.querySelector('.form-dropdown-item__header');
-  const inputs = Array.from(dropdownBody.querySelectorAll('input'));
+  const labels = Array.from(dropdownBody.querySelectorAll('label'));
 
   function updateDropdownTabIndexes() {
     if (dropdown.classList.contains('expanded')) {
-      dropdownItems.forEach((input) => input.setAttribute('tabindex', '0'));
+      dropdown.setAttribute('tabindex', '');
+      dropdownItems.forEach((label) => label.setAttribute('tabindex', '0'));
     } else {
-      dropdownItems.forEach((input) => input.setAttribute('tabindex', ''));
+      dropdown.setAttribute('tabindex', '0');
+      dropdownItems.forEach((label) => label.setAttribute('tabindex', ''));
     }
+    const selected = dropdown.querySelector('label:has(input:checked)');
+    if (selected) selected.setAttribute('tabindex', '');
   }
 
-  function handleDropdown(e) {
-    if (!e.target.closest('.form-dropdown-item__body')) {
-      e.currentTarget.classList.toggle('expanded');
-      updateDropdownTabIndexes();
-    }
+  // Обработать выход из дропдавна. Если в 'keydown' e.target === input:last-child то classList.toggle('expanded');
+
+  function handleDropdown() {
+    dropdown.classList.toggle('expanded');
+    updateDropdownTabIndexes();
   }
+  function closeDropdown() {
+    dropdown.classList.remove('expanded');
+    updateDropdownTabIndexes();
+  }
+  function openDropdown() {
+    dropdown.classList.add('expanded');
+    updateDropdownTabIndexes();
+  }
+  function dropdownEntered(e) {
+    return e.target === dropdown;
+  }
+  function dropdownLeft(e) {
+    return e.target.closest('.form-item').previousElementSibling === dropdown;
+  }
+
   dropdown.addEventListener('click', (e) => {
-    handleDropdown(e);
+    if (!e.target.closest('.form-dropdown-item__body')) handleDropdown();
   });
-  dropdown.addEventListener('keyup', (e) => {
+  formItems.addEventListener('keyup', (e) => {
     if (e.code === 'Tab') {
-      handleDropdown(e);
+      if (dropdownEntered(e)) openDropdown();
+      if (dropdownLeft(e)) closeDropdown();
+    }
+    if (e.code === 'Enter' && e.target.closest('.form-dropdown-item__item')) {
+      e.target.dispatchEvent(new MouseEvent('click', { target: e.target }));
     }
   });
 
   dropdownBody.addEventListener('input', (e) => {
-    const input = inputs.includes(e.target) ? e.target : undefined;
-    if (input) {
-      dropdownHeader.textContent = input.previousElementSibling.textContent;
-      dropdown.classList.remove('expanded');
-    }
+    dropdownHeader.textContent = e.target.previousElementSibling.textContent;
+    closeDropdown();
   });
 })();
 
