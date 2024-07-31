@@ -17,6 +17,17 @@
     <title>UI/UX Designer</title>
   </head>
   <body id="body">
+    <svg style="display: none">
+      <symbol
+        id="svg-check-mark"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        xml:space="preserve"
+      >
+        <polygon points="11.941,28.877 0,16.935 5.695,11.24 11.941,17.486 26.305,3.123 32,8.818" />
+      </symbol>
+    </svg>
     <header>
       <div class="container">
         <a href="#main" class="sr-only">Skip to main content</a>
@@ -939,6 +950,12 @@
           </div>
         </div>
         <div class="credentials">Designed by @mahmood.fazile UI/UX designer</div>
+      </div>
+      <div class="popover hidden" id="form-popover">
+        <div class="popover__content">
+          <svg><use href="#svg-check-mark"></use></svg>
+          <span>Form successfully submited</span>
+        </div>
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

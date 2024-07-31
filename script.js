@@ -148,6 +148,11 @@
     validate.call(serviceOfInterestFormItem);
   });
 
+  //setup popover for successfull form submission
+
+  const popover = document.getElementById('form-popover');
+  let timeout;
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -193,6 +198,13 @@
       body: JSON.stringify(body),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
+
+    if (timeout) return;
+    popover.classList.remove('hidden');
+    timeout = setTimeout(() => {
+      popover.classList.add('hidden');
+      timeout = false;
+    }, 5000);
   });
 })();
 
@@ -206,6 +218,7 @@
   });
 })();
 
+//toggle sticky header
 (function () {
   const header = document.querySelector('header');
   function handler(e) {
@@ -214,6 +227,8 @@
   window.addEventListener('scroll', handler);
   handler();
 })();
+
+// setup swiper
 (function () {
   let swiper,
     matches = checkMatching();
