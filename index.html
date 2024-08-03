@@ -697,7 +697,11 @@
                 id="form--service-of-interest-item"
                 tabindex="0"
               >
-                <div class="form-dropdown-item__panel">
+                <div
+                  class="form-dropdown-item__panel"
+                  aria-controls="dropdown"
+                  aria-expanded="false"
+                >
                   <span class="form-dropdown-item__header">Service of interest</span>
                   <div class="form-dropdown-item__arrow"></div>
                   <div class="form-item__error tooltiped">
@@ -709,7 +713,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-dropdown-item__body-outer-wrapper">
+                <div id="dropdown" class="form-dropdown-item__body-outer-wrapper">
                   <div class="form-dropdown-item__body-inner-wrapper">
                     <div class="form-dropdown-item__body">
                       <span class="form-dropdown-item__body-header"

@@ -2,6 +2,7 @@
 (function () {
   const formItems = document.querySelector('.form-items');
   const dropdown = document.querySelector('.form-dropdown-item');
+  const dropdownPanel = document.querySelector('.form-dropdown-item__panel');
   const dropdownItems = document.querySelectorAll('.form-dropdown-item__item');
   const dropdownBody = document.querySelector('.form-dropdown-item__body');
   const dropdownHeader = document.querySelector('.form-dropdown-item__header');
@@ -29,6 +30,7 @@
   function openDropdown() {
     dropdown.classList.add('expanded');
     updateDropdownTabIndexes();
+    dropdown.querySelector('label:has(input:not(:checked))').focus();
   }
   function dropdownEntered(e) {
     return e.target === dropdown;
@@ -37,8 +39,8 @@
     return e.target.closest('.form-item').previousElementSibling === dropdown;
   }
 
-  dropdown.addEventListener('click', (e) => {
-    if (!e.target.closest('.form-dropdown-item__body')) toggleDropdown();
+  dropdownPanel.addEventListener('click', (e) => {
+    toggleDropdown();
   });
   formItems.addEventListener('keyup', (e) => {
     if (e.code === 'Tab') {
@@ -150,8 +152,13 @@
 
   //setup popover for successfull form submission
 
-  const popover = document.getElementById('form-popover');
   let timeout;
+  const popover = document.getElementById('form-popover');
+  popover.addEventListener('click', (e) => {
+    popover.classList.add('hidden');
+    clearTimeout(timeout);
+    timeout = false;
+  });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();

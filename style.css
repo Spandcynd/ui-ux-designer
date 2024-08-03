@@ -867,20 +867,6 @@ form {
   }
 }
 
-.form-dropdown-item {
-  box-shadow: 0 8px 3px transparent;
-  transition: box-shadow 0.4s;
-  &:focus-within {
-    outline: none;
-  }
-  &:has(.form-dropdown-item__body:focus-within) {
-    outline: 1px solid var(--color-main-1d);
-  }
-}
-.form-dropdown-item.expanded {
-  box-shadow: 0 8px 3px rgba(0, 0, 0, 0.356);
-}
-
 .form-dropdown-item__panel {
   display: flex;
   align-items: center;
@@ -938,11 +924,19 @@ form {
   display: inline-block;
   border-bottom: 1px solid var(--color-main-2d);
 }
+.form-dropdown-item__item:before {
+  content: '>';
+  margin-right: 0.5em;
+  display: none;
+}
 .form-dropdown-item__item input {
   display: none;
 }
-.form-dropdown-item__item:is(:has(input:checked), :hover, :focus) {
+.form-dropdown-item__item:has(input:checked) {
   color: white;
+}
+.form-dropdown-item__item:is(:hover, :focus):has(input:not(:checked)):before {
+  display: unset;
 }
 
 .form-textarea-item textarea {
