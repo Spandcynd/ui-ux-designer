@@ -690,13 +690,10 @@ main {
   /* Бефор позиционирован абсолютно, а у лейба не создавала новый стекинг контекст
     но при навидении на лейбу она скейлилась, это заставляло ее создать стекинг контекст 
     и бефор позиционировался относительно лейбы как и надо. Добавил позишн релатив чтобы 
-    бефор позиционаровался относительной своей лейбы
+    бефор позиционаровался относительной своей лейбы / ????
   */
   &:where(:hover, :focus) {
     scale: 1.03;
-    &::before {
-      scale: 1.03;
-    }
   }
 }
 .category-filter label:has(input[type='radio']:checked) {
@@ -867,6 +864,10 @@ form {
   }
 }
 
+.form-item .tooltip {
+  --offset: 40%;
+}
+
 .form-dropdown-item__panel {
   display: flex;
   align-items: center;
@@ -1035,6 +1036,12 @@ footer .contact__link {
   display: flex;
   align-items: center;
   scale: none;
+  &:is(:hover, :focus) {
+    color: var(--color-main-1d);
+    & .contact__svg {
+      stroke: var(--color-main-1d);
+    }
+  }
 }
 
 footer .contact__svg {

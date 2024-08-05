@@ -266,25 +266,24 @@ section {
     vertical-align: middle;
     fill: var(--color-main-2d);
   }
-  &:hover svg {
+  &:is(:hover, :focus) svg {
     fill: var(--color-main-1d);
   }
 }
-
-*:has(> .clipboard-icon):hover .clipboard-icon {
+*:has(> .clipboard-icon):is(:hover, :focus-within) .clipboard-icon {
   opacity: 1;
 }
 
 .tooltiped {
   position: relative;
   cursor: default;
-  &:hover .tooltip {
+  &:is(:hover, :focus) .tooltip {
     opacity: 1;
-    transition-delay: 0.6s;
+    transition-delay: 0.55s;
   }
 }
 .tooltip {
-  --offset: 40%;
+  --offset: 0%;
   position: absolute;
   opacity: 0;
   transition: opacity 0.2s;
@@ -392,4 +391,13 @@ section {
 }
 .popover__content span {
   color: var(--color-accent-0d);
+}
+
+img[alt] {
+  color: var(--color-main-0d);
+  font-size: 1.5rem;
+}
+
+:focus {
+  outline: 1px solid var(--color-main-0d);
 }

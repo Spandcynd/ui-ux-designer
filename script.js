@@ -1,6 +1,5 @@
 // dropdown in contact-me section form
 (function () {
-  const formItems = document.querySelector('.form-items');
   const dropdown = document.querySelector('.form-dropdown-item');
   const dropdownPanel = document.querySelector('.form-dropdown-item__panel');
   const dropdownItems = document.querySelectorAll('.form-dropdown-item__item');
@@ -23,29 +22,53 @@
     dropdown.classList.toggle('expanded');
     updateDropdownTabIndexes();
   }
-  function closeDropdown() {
+  function closeDropdownBody() {
     dropdown.classList.remove('expanded');
     updateDropdownTabIndexes();
   }
-  function openDropdown() {
+  function openDropdownBody() {
     dropdown.classList.add('expanded');
     updateDropdownTabIndexes();
     dropdown.querySelector('label:has(input:not(:checked))').focus();
   }
-  function dropdownEntered(e) {
-    return e.target === dropdown;
-  }
-  function dropdownLeft(e) {
-    return e.target.closest('.form-item').previousElementSibling === dropdown;
-  }
+
+  const checkDropdownStatus = (function () {
+    let previous, status;
+    document.addEventListener('keyup', (e) => {
+      if (e.code !== 'Tab') return;
+      const current = e.target.closest('.form-item');
+      status =
+        previous === dropdown && current === dropdown
+          ? 'hold'
+          : previous === dropdown
+          ? 'left'
+          : dropdown === current
+          ? 'entered'
+          : 'unknown';
+      previous = current;
+    });
+
+    return function () {
+      return status;
+    };
+  })();
 
   dropdownPanel.addEventListener('click', (e) => {
     toggleDropdown();
   });
-  formItems.addEventListener('keyup', (e) => {
+  document.addEventListener('keyup', (e) => {
     if (e.code === 'Tab') {
-      if (dropdownEntered(e)) openDropdown();
-      if (dropdownLeft(e)) closeDropdown();
+      const status = checkDropdownStatus();
+      switch (status) {
+        case 'entered': {
+          openDropdownBody();
+          break;
+        }
+        case 'left': {
+          closeDropdownBody();
+          break;
+        }
+      }
     }
     if (e.code === 'Enter' && e.target.closest('.form-dropdown-item__item')) {
       e.target.click();
@@ -54,7 +77,7 @@
 
   dropdownBody.addEventListener('input', (e) => {
     dropdownHeader.textContent = e.target.previousElementSibling.textContent;
-    closeDropdown();
+    closeDropdownBody();
   });
 })();
 
@@ -152,12 +175,45 @@
 
   //setup popover for successfull form submission
 
-  let timeout;
-  const popover = document.getElementById('form-popover');
-  popover.addEventListener('click', (e) => {
-    popover.classList.add('hidden');
-    clearTimeout(timeout);
-    timeout = false;
+  const popover = {
+    element: document.getElementById('form-popover'),
+    state: 'hidden',
+    timeout: undefined,
+    show: function () {
+      if (this.state === 'visible') return;
+      this.element.classList.remove('hidden');
+      this.updateState();
+    },
+    hide: function () {
+      if (this.state === 'hidden') return;
+      this.element.classList.add('hidden');
+      this.updateState();
+    },
+    updateState: function () {
+      this.state = this.element.classList.contains('hidden') ? 'hidden' : 'visible';
+    },
+    timeoutHide: function (time) {
+      this.clearTimeout();
+      this.timeout = setTimeout(() => {
+        this.hide();
+        this.clearTimeout();
+      }, time);
+    },
+    clearTimeout: function () {
+      this.timeout = clearTimeout(this.timeout);
+    },
+    pop: function () {
+      this.show();
+      this.timeoutHide(5000);
+    },
+    forceClose: function () {
+      this.hide();
+      this.clearTimeout();
+    },
+  };
+
+  popover.element.addEventListener('click', (e) => {
+    popover.forceClose();
   });
 
   form.addEventListener('submit', function (e) {
@@ -206,12 +262,7 @@
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
 
-    if (timeout) return;
-    popover.classList.remove('hidden');
-    timeout = setTimeout(() => {
-      popover.classList.add('hidden');
-      timeout = false;
-    }, 5000);
+    popover.pop();
   });
 })();
 
@@ -320,11 +371,54 @@
 
 //copy to clipboard logic
 (function () {
-  const clickables = Array.from(document.querySelectorAll('[data-action-target]'));
-  clickables.forEach((clickable) => {
-    const target = document.getElementById(clickable.dataset.actionTarget);
-    clickable.onclick = function () {
+  const copies = Array.from(document.querySelectorAll('._copy-to-clipboard'));
+  copies.forEach((copy) => {
+    const target = document.getElementById(copy.dataset.copyTarget);
+    const tooltipContent = copy.querySelector('.tooltip__content');
+    const tooltipText = { initial: 'copy', replaced: 'copied!' };
+
+    const handler = (() => {
+      let timeout;
+      return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          tooltipContent.innerText = tooltipText.initial;
+        }, 550);
+      };
+    })();
+
+    copy.addEventListener('blur', handler);
+    copy.addEventListener('mouseleave', () => {
+      copy.blur();
+    });
+
+    copy.onclick = function () {
       window.navigator.clipboard.writeText(target.textContent);
+      tooltipContent.innerText = tooltipText.replaced;
     };
+    copy.addEventListener('keypress', (e) => {
+      if (e.code === 'Enter') copy.click();
+    });
+  });
+
+  // const tooltipContent = target.classList.contains('_tooltip-modifiable')
+  //   ? target.querySelector('tooltip__content')
+  //   : null;
+  function copyToClipboard() {
+    window.navigator.clipboard.writeText(target.textContent);
+  }
+  function writeTextToTooltip() {
+    const tooltips = document.querySelector();
+  }
+})();
+
+// category filter
+(function () {
+  const categoryFilter = document.querySelector('.category-filter');
+  categoryFilter.addEventListener('keypress', (e) => {
+    if (e.code !== 'Enter') return;
+    if (e.target.classList.contains('category')) {
+      e.target.click();
+    }
   });
 })();
