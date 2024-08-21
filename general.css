@@ -277,10 +277,10 @@ section {
 .tooltiped {
   position: relative;
   cursor: default;
-  &:is(:hover, :focus) .tooltip {
-    opacity: 1;
-    transition-delay: 0.55s;
-  }
+}
+.tooltiped_hover-focus:is(:hover, :focus-within) .tooltip {
+  opacity: 1;
+  transition-delay: 0.55s;
 }
 .tooltip {
   --offset: 0%;
@@ -302,38 +302,19 @@ section {
   height: 10px;
   box-sizing: border-box;
   border: 10px solid transparent;
-  border-top-color: var(--color-background-0d);
+  border-top-color: #121212e8;
   filter: drop-shadow(0 0 5px black);
   z-index: -1;
 }
 .tooltip__wrapper {
-  background: var(--color-background-0d);
+  background-color: #121212e8;
+
   border-radius: 5px;
   padding: 0.4em 0.8em;
 }
 .tooltip__content {
   font-size: 1rem;
   min-width: max-content;
-}
-
-.tooltip_info {
-  color: var(--color-main-1d);
-
-  &::after {
-    border-top-color: var(--color-background-0d);
-  }
-  & .tooltip__wrapper {
-    background: var(--color-background-0d);
-  }
-}
-.tooltip_error {
-  color: black;
-  &::after {
-    border-top-color: orange;
-  }
-  & .tooltip__wrapper {
-    background: orange;
-  }
 }
 
 .popover {
@@ -398,6 +379,12 @@ img[alt] {
   font-size: 1.5rem;
 }
 
-:focus {
-  outline: 1px solid var(--color-main-0d);
+.ffi-errors {
+  color: rgb(163, 0, 0);
+}
+.ffi-warnings {
+  color: orange;
+}
+.ffi-infos {
+  color: rgb(74, 152, 255);
 }

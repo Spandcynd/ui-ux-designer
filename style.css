@@ -695,6 +695,9 @@ main {
   &:where(:hover, :focus) {
     scale: 1.03;
   }
+  &:focus {
+    outline: 1px solid var(--color-main-0d);
+  }
 }
 .category-filter label:has(input[type='radio']:checked) {
   color: white;
@@ -833,35 +836,25 @@ form {
   -webkit-box-shadow: 0 0 0px 40rem var(--color-background-1d) inset;
 }
 
-.form-item__error {
+.form-item__info {
+  color: var(--color-main-0d);
   line-height: 1;
-  background-color: orange;
-  color: black;
   border-radius: 50%;
+  border: 1px solid var(--color-main-0d);
   min-width: 1em;
   aspect-ratio: 1/1;
   text-align: center;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.2s;
   margin-left: 0.25em;
 }
-.form-item:has(:user-invalid) .form-item__error {
-  opacity: 1;
-}
-.form-item__error.pulse {
-  animation: pulse 1.5s forwards;
+
+.form-item .tooltip {
+  max-width: 40ch;
 }
 
-@keyframes pulse {
-  0% {
-    scale: 1;
-  }
-  10% {
-    scale: 1.2;
-  }
-  100% {
-    scale: 1;
-  }
+.form-item:has(:user-invalid) .tooltip {
+  opacity: 1;
 }
 
 .form-item .tooltip {
@@ -869,14 +862,14 @@ form {
 }
 
 .form-dropdown-item__panel {
+  position: relative;
   display: flex;
   align-items: center;
-  & > :first-child {
-    flex: 1;
-    text-align: start;
-  }
 }
 
+.form-dropdown-item__arrow {
+  cursor: pointer;
+}
 .form-dropdown-item__arrow::before,
 .form-dropdown-item__arrow::after {
   content: '';
@@ -903,7 +896,18 @@ form {
   transform: rotate(45deg) translateX(-0.3em);
 }
 
-.form-dropdown-item__panel:has(~ .form-dropdown-item__body-outer-wrapper :checked) {
+.form-dropdown-item__button {
+  border: none;
+  padding: 0;
+  background: transparent;
+  flex: 1;
+  text-align: start;
+}
+
+.form-dropdown-item__panel:has(
+    ~ .form-dropdown-item__body-outer-wrapper .form-dropdown-item__item:not(:first-child) :checked
+  )
+  .form-dropdown-item__button {
   color: white;
 }
 .form-dropdown-item__body-outer-wrapper {
@@ -921,11 +925,10 @@ form {
 .form-dropdown-item.expanded .form-dropdown-item__body {
   max-height: 100%;
 }
-.form-dropdown-item__body-header {
-  display: inline-block;
-  border-bottom: 1px solid var(--color-main-2d);
+.form-dropdown-item__item {
+  display: block;
 }
-.form-dropdown-item__item:before {
+.form-dropdown-item__item::before {
   content: '>';
   margin-right: 0.5em;
   display: none;
@@ -936,8 +939,12 @@ form {
 .form-dropdown-item__item:has(input:checked) {
   color: white;
 }
-.form-dropdown-item__item:is(:hover, :focus):has(input:not(:checked)):before {
+.form-dropdown-item__item:hover::before {
   display: unset;
+}
+
+.form-textarea-item :is(.form-item__error, .form-item__info) {
+  align-self: flex-start;
 }
 
 .form-textarea-item textarea {

@@ -1,177 +1,330 @@
 // dropdown in contact-me section form
 (function () {
   const dropdown = document.querySelector('.form-dropdown-item');
-  const dropdownPanel = document.querySelector('.form-dropdown-item__panel');
-  const dropdownItems = document.querySelectorAll('.form-dropdown-item__item');
+  const dropdownButton = document.querySelector('.form-dropdown-item__button');
+  const dropdownArrow = document.querySelector('.form-dropdown-item__arrow');
   const dropdownBody = document.querySelector('.form-dropdown-item__body');
-  const dropdownHeader = document.querySelector('.form-dropdown-item__header');
 
-  function updateDropdownTabIndexes() {
+  function updateDropdownState() {
     if (dropdown.classList.contains('expanded')) {
-      dropdown.setAttribute('tabindex', '');
-      dropdownItems.forEach((label) => label.setAttribute('tabindex', '0'));
+      dropdownButton.setAttribute('aria-expanded', 'true');
     } else {
-      dropdown.setAttribute('tabindex', '0');
-      dropdownItems.forEach((label) => label.setAttribute('tabindex', ''));
+      dropdownButton.setAttribute('aria-expanded', 'false');
     }
-    const selected = dropdown.querySelector('label:has(input:checked)');
-    if (selected) selected.setAttribute('tabindex', '');
+  }
+
+  function selectPreviousOption() {
+    const beforeChecked = dropdownBody.querySelector(
+        '.form-dropdown-item__item:has(+ .form-dropdown-item__item :checked)',
+      ),
+      firstAndChecked = dropdownBody.querySelector(
+        '.form-dropdown-item__item:first-child:has(:checked)',
+      ),
+      last = dropdownBody.querySelector('.form-dropdown-item__item:last-child');
+
+    const previous = beforeChecked ?? (firstAndChecked ? last : null);
+
+    if (previous) {
+      previous.click();
+    } else {
+      last.click();
+    }
+  }
+  function selectNextOption() {
+    const afterChecked = dropdownBody.querySelector(
+        '.form-dropdown-item__item:has(:checked) + .form-dropdown-item__item',
+      ),
+      lastAndChecked = dropdownBody.querySelector(
+        '.form-dropdown-item__item:last-child:has(:checked)',
+      ),
+      first = dropdownBody.querySelector('.form-dropdown-item__item:first-child');
+
+    const next = afterChecked ?? (lastAndChecked ? first : null);
+
+    if (next) {
+      next.click();
+    } else {
+      first.click();
+    }
   }
 
   function toggleDropdown() {
     dropdown.classList.toggle('expanded');
-    updateDropdownTabIndexes();
-  }
-  function closeDropdownBody() {
-    dropdown.classList.remove('expanded');
-    updateDropdownTabIndexes();
-  }
-  function openDropdownBody() {
-    dropdown.classList.add('expanded');
-    updateDropdownTabIndexes();
-    dropdown.querySelector('label:has(input:not(:checked))').focus();
+    updateDropdownState();
   }
 
-  const checkDropdownStatus = (function () {
-    let previous, status;
-    document.addEventListener('keyup', (e) => {
-      if (e.code !== 'Tab') return;
-      const current = e.target.closest('.form-item');
-      status =
-        previous === dropdown && current === dropdown
-          ? 'hold'
-          : previous === dropdown
-          ? 'left'
-          : dropdown === current
-          ? 'entered'
-          : 'unknown';
-      previous = current;
-    });
-
-    return function () {
-      return status;
-    };
-  })();
-
-  dropdownPanel.addEventListener('click', (e) => {
+  dropdownButton.addEventListener('click', (e) => {
+    e.preventDefault();
     toggleDropdown();
   });
-  document.addEventListener('keyup', (e) => {
-    if (e.code === 'Tab') {
-      const status = checkDropdownStatus();
-      switch (status) {
-        case 'entered': {
-          openDropdownBody();
-          break;
-        }
-        case 'left': {
-          closeDropdownBody();
-          break;
-        }
+  dropdownArrow.addEventListener('click', () => dropdownButton.click());
+
+  window.addEventListener(
+    'keydown',
+    (e) => {
+      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+        e.preventDefault();
       }
+    },
+    false,
+  );
+
+  dropdownButton.addEventListener('keydown', (e) => {
+    if (e.code === 'Tab') return;
+    if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
+      selectPreviousOption();
+      return;
     }
-    if (e.code === 'Enter' && e.target.closest('.form-dropdown-item__item')) {
-      e.target.click();
+    if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
+      selectNextOption();
+      return;
     }
   });
 
   dropdownBody.addEventListener('input', (e) => {
-    dropdownHeader.textContent = e.target.previousElementSibling.textContent;
-    closeDropdownBody();
+    dropdownButton.textContent = e.target.previousElementSibling.textContent;
   });
 })();
 
 // form handling
 (function () {
+  const formItems = document.getElementsByClassName('form-item');
+
   const nameFormItem = document.getElementById('form--name-item');
   nameFormItem.label = nameFormItem.querySelector('label');
   nameFormItem.input = nameFormItem.querySelector('input');
-  nameFormItem.error = nameFormItem.querySelector('.form-item__error');
   nameFormItem.errorsMap = {
     valueMissing: 'You have to input your name',
   };
-  nameFormItem.errorList = nameFormItem.querySelector('.error-list');
-  nameFormItem.errorArray = undefined;
+  nameFormItem.warningsMap = {
+    wrongName: 'Your name cannot be "Name"',
+  };
+  nameFormItem.checkWarnings = function () {
+    const warnings = [];
+    if (this.input.value.toLowerCase() === 'name') warnings.push(this.warningsMap.wrongName);
+    return warnings;
+  };
 
   const emailFormItem = document.getElementById('form--email-item');
-  emailFormItem.label = emailFormItem.querySelector('label');
   emailFormItem.input = emailFormItem.querySelector('input');
-  emailFormItem.error = emailFormItem.querySelector('.form-item__error');
   emailFormItem.errorsMap = {
     valueMissing: 'You have to input your email',
     typeMismatch: 'Input valid email address',
   };
-  emailFormItem.errorList = emailFormItem.querySelector('.error-list');
-  emailFormItem.errorArray = undefined;
+  emailFormItem.warningsMap = {
+    wrongEmail: 'Real email cannot have @example domain',
+  };
+  emailFormItem.infosMap = {
+    tip: 'This email will only be used to contact you. Dont be afraid of spam',
+  };
+  emailFormItem.checkWarnings = function () {
+    const warnings = [];
+    if (this.input.value.includes('@example')) warnings.push(this.warningsMap.wrongEmail);
+    return warnings;
+  };
 
   const phoneFormItem = document.getElementById('form--tel-item');
-  phoneFormItem.label = phoneFormItem.querySelector('label');
   phoneFormItem.input = phoneFormItem.querySelector('input');
-  phoneFormItem.error = phoneFormItem.querySelector('.form-item__error');
   phoneFormItem.errorsMap = {
     valueMissing: 'You have to input your phone',
     patternMismatch: 'Input valid phone number',
   };
-  phoneFormItem.errorList = phoneFormItem.querySelector('.error-list');
-  phoneFormItem.errorArray = undefined;
+  phoneFormItem.warningsMap = {
+    wrongPhone: 'Your phone cannot be 123456789',
+  };
+  phoneFormItem.checkWarnings = function () {
+    const warnings = [];
+    if (this.input.value === '123456789') warnings.push(this.warningsMap.wrongPhone);
+    return warnings;
+  };
 
   const serviceOfInterestFormItem = document.getElementById('form--service-of-interest-item');
-  serviceOfInterestFormItem.label = serviceOfInterestFormItem.querySelector('label');
   serviceOfInterestFormItem.input = serviceOfInterestFormItem.querySelector('input');
-  serviceOfInterestFormItem.error = serviceOfInterestFormItem.querySelector('.form-item__error');
-  serviceOfInterestFormItem.errorsMap = {
-    valueMissing: 'You have to choose any option',
-  };
-  serviceOfInterestFormItem.errorList = serviceOfInterestFormItem.querySelector('.error-list');
-  serviceOfInterestFormItem.errorArray = undefined;
+  serviceOfInterestFormItem.infoContent =
+    serviceOfInterestFormItem.querySelector('.tooltip__content');
 
   const timelineFormItem = document.getElementById('form--timeline-item');
   timelineFormItem.input = timelineFormItem.querySelector('input');
 
   const projectDetailsFormItem = document.getElementById('form--project-details-item');
-  projectDetailsFormItem.textArea = projectDetailsFormItem.querySelector('textarea');
+  projectDetailsFormItem.input = projectDetailsFormItem.querySelector('textarea');
+  projectDetailsFormItem.errorsMap = {
+    valueMissing: 'This field is required',
+    valueUnderflow: 'Your input too short',
+    valueOverflow: 'Your input too long',
+  };
+  projectDetailsFormItem.infosMap = {
+    tip: 'Describe project you are interested in or select one of listed categories above, except "Other"',
+  };
 
   const form = document.querySelector('form');
 
   function errors() {
+    if (this.input.validity.valid) return [];
     const validityObj = this.input.validity;
     const errorsMap = this.errorsMap;
-    this.errorArray = [];
+    const errorArray = [];
     for (const error of Object.keys(validityObj.__proto__)) {
       if (!validityObj[error]) continue;
-      this.errorArray.push(errorsMap[error]);
+      errorArray.push(errorsMap[error]);
     }
+    return errorArray;
+  }
+
+  function warnings() {
+    return this.checkWarnings ? this.checkWarnings() : [];
+  }
+
+  function infos() {
+    return this.checkInfos ? this.checkInfos() : [];
   }
 
   function validate() {
-    errors.call(this);
-    this.errorList.innerHTML = '';
-    this.errorArray.forEach((error) => {
-      const errorItem = document.createElement('li');
-      errorItem.className = 'error-list__item';
-      errorItem.innerText = error;
-      this.errorList.appendChild(errorItem);
-    });
+    const errorArray = errors.call(this);
+    const warningsArray = warnings.call(this);
+    const infosArray = infos.call(this);
+
+    this.infoContent = {
+      errors: errorArray,
+      warnings: warningsArray,
+      infos: infosArray,
+    };
   }
 
-  function validateForm() {
-    Array.from(form.querySelectorAll('.form-item:has(._will-validate)')).forEach((formItem) => {
-      validate.call(formItem);
-    });
+  function insertEventListener(type, callback, options) {
+    this.addEventListener(type, callback, options);
+    this.setAttribute('listener', 'true');
   }
 
-  nameFormItem.input.addEventListener('input', (e) => {
-    validate.call(nameFormItem);
+  function ejectEventListener(type, callback, options) {
+    this.removeEventListener(type, callback, options);
+    this.removeAttribute('listener');
+  }
+
+  const validateOnSubmit = (function () {
+    const formItemsArray = Array.from(formItems);
+    return function () {
+      formItemsArray.forEach((formItem) => {
+        validate.call(formItem);
+        const ffi = new FormFieldInfo(formItem.querySelector('.tooltip__content'), formItem);
+        ffi.mount();
+      });
+    };
+  })();
+
+  function resetValidators() {
+    Array.from(formItems).forEach((formItem) => {
+      if (!formItem.input.getAttribute('listener')) {
+        insertEventListener.call(formItem.input, 'input', (e) => {
+          validate.call(formItem);
+        });
+      }
+    });
+  }
+  resetValidators();
+
+  serviceOfInterestFormItem.addEventListener('input', (e) => {
+    if (e.target.closest('.form-dropdown-item__item:last-child')) {
+      projectDetailsFormItem.input.setAttribute('required', '');
+      projectDetailsFormItem.input.setAttribute('minlength', 10);
+      projectDetailsFormItem.input.setAttribute('maxlength', 250);
+    } else {
+      projectDetailsFormItem.input.removeAttribute('required');
+      projectDetailsFormItem.input.removeAttribute('minlength');
+      projectDetailsFormItem.input.removeAttribute('maxlength');
+    }
   });
-  emailFormItem.input.addEventListener('input', (e) => {
-    validate.call(emailFormItem);
-  });
-  phoneFormItem.input.addEventListener('input', (e) => {
-    validate.call(phoneFormItem);
-  });
-  serviceOfInterestFormItem.input.addEventListener('input', (e) => {
-    validate.call(serviceOfInterestFormItem);
-  });
+
+  class FormFieldInfo {
+    #node = undefined;
+    #asociatedFormControll = undefined;
+
+    // `
+    //     <ul class="ffi-categories">
+    //         <li class="ffi-category ffi-errors-container">
+    //           <ul class="ffi-errors">
+    //           </ul>
+    //         </li>
+    //         <li class="ffi-category ffi-warnings-container">
+    //           <ul class="ffi-warnings">
+    //           </ul>
+    //         </li>
+    //         <li class="ffi-category ffi-infos-container">
+    //           <ul class="ffi-infos">
+    //           </ul>
+    //         </li>
+    //       </ul>`
+
+    constructor(node, asociatedFormControll) {
+      this.#node = node;
+      this.#asociatedFormControll = asociatedFormControll;
+    }
+
+    mount() {
+      const content = this.#asociatedFormControll.infoContent;
+
+      this.#node.innerHTML = '';
+
+      const markupContainer = document.createElement('div');
+      markupContainer.className = 'ffi-container';
+      this.#node.appendChild(markupContainer);
+
+      const infoCategories = document.createElement('ul');
+      infoCategories.className = 'ffi-categories';
+      markupContainer.appendChild(infoCategories);
+
+      if (content.errors.length) {
+        const errorsContainer = document.createElement('li');
+        errorsContainer.className = 'ffi-category ffi-errors-container';
+        infoCategories.appendChild(errorsContainer);
+
+        const errors = document.createElement('ul');
+        errors.className = 'ffi-errors';
+        errorsContainer.appendChild(errors);
+
+        for (const errorText of content.errors) {
+          const error = document.createElement('li');
+          error.className = 'ffi-error';
+          error.textContent = errorText;
+          errors.appendChild(error);
+        }
+      }
+
+      if (content.warnings.length) {
+        const warningsContainer = document.createElement('li');
+        warningsContainer.className = 'ffi-category ffi-warnings-container';
+        infoCategories.appendChild(warningsContainer);
+
+        const warnings = document.createElement('ul');
+        warnings.className = 'ffi-warnings';
+        warningsContainer.appendChild(warnings);
+
+        for (const warningText of content.warnings) {
+          const warning = document.createElement('li');
+          warning.className = 'ffi-warning';
+          warning.textContent = warningText;
+          warnings.appendChild(warning);
+        }
+      }
+
+      if (content.infos.length) {
+        const infosContainer = document.createElement('li');
+        infosContainer.className = 'ffi-category ffi-infos-container';
+        infoCategories.appendChild(infosContainer);
+
+        const infos = document.createElement('ul');
+        infos.className = 'ffi-infos';
+        infosContainer.appendChild(infos);
+
+        for (const infosText of content.infos) {
+          const info = document.createElement('li');
+          info.className = 'ffi-info';
+          info.textContent = infosText;
+          infos.appendChild(info);
+        }
+      }
+    }
+  }
 
   //setup popover for successfull form submission
 
@@ -220,15 +373,15 @@
     e.preventDefault();
 
     // form validation
-    validateForm();
+    validateOnSubmit();
     if (!form.checkValidity()) {
       document.getElementById('contact-me').scrollIntoView();
       setTimeout(() => {
-        Array.from(form.querySelectorAll('._will-validate')).forEach((formControll) => {
-          if (!formControll.validity.valid) {
-            formControll
-              .closest('.form-item')
-              .error.animate(
+        Array.from(formItems).forEach((formItem) => {
+          if (!formItem.input.validity.valid) {
+            formItem
+              .querySelector('.form-item__info')
+              .animate(
                 [
                   { scale: 1 },
                   { scale: 1.2, offset: 0.25 },
@@ -253,7 +406,7 @@
       tel: phoneFormItem.input.value,
       'service-of-interest': checkedServiceOfInterest?.value ?? '',
       timeline: timelineFormItem.input.value,
-      'project-details': projectDetailsFormItem.textArea.value,
+      'project-details': projectDetailsFormItem.input.value,
     };
 
     fetch(this.getAttribute('action'), {
