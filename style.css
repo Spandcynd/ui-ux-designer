@@ -844,20 +844,19 @@ form {
   min-width: 1em;
   aspect-ratio: 1/1;
   text-align: center;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 0.2s;
   margin-left: 0.25em;
 }
 
-.form-item .tooltip {
-  max-width: 40ch;
-}
-
-.form-item:has(:user-invalid) .tooltip {
+.form-item__info:not(.no-info) {
   opacity: 1;
 }
 
-.form-item .tooltip {
+.form-item__info .tooltip {
+  filter: none;
+
+  max-width: 40ch;
   --offset: 40%;
 }
 
@@ -985,7 +984,7 @@ form .buttonlink-secondary {
   }
   transition: color 0.2s, border-color 0.2s;
 }
-form:has(:user-invalid) .buttonlink-secondary:is(:hover, :focus-visible) {
+form.requires-user-attention .buttonlink-secondary {
   color: red;
   border-color: red;
 }

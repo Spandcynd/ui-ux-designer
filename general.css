@@ -278,7 +278,7 @@ section {
   position: relative;
   cursor: default;
 }
-.tooltiped_hover-focus:is(:hover, :focus-within) .tooltip {
+.tooltiped:is(:hover, :focus-within) .tooltip {
   opacity: 1;
   transition-delay: 0.55s;
 }
@@ -302,19 +302,21 @@ section {
   height: 10px;
   box-sizing: border-box;
   border: 10px solid transparent;
-  border-top-color: #121212e8;
+  border-top-color: #0a0a0a;
   filter: drop-shadow(0 0 5px black);
   z-index: -1;
 }
 .tooltip__wrapper {
-  background-color: #121212e8;
+  background-color: #0a0a0a;
 
   border-radius: 5px;
   padding: 0.4em 0.8em;
 }
 .tooltip__content {
   font-size: 1rem;
-  min-width: max-content;
+  width: max-content;
+  max-width: 20ch;
+  text-align: start;
 }
 
 .popover {

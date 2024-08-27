@@ -640,12 +640,13 @@
                     name="name"
                     autocomplete="name"
                     required
+                    aria-describedby="tooltipN1"
                   />
-                  <div class="form-item__info tooltiped">
+                  <div class="form-item__info tooltiped" aria-hidden="true">
                     !
-                    <div class="tooltip">
+                    <div class="tooltip" id="tooltipN1">
                       <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
+                        <div class="tooltip__content" aria-live="assertive"></div>
                       </div>
                     </div>
                   </div>
@@ -696,13 +697,14 @@
               </li>
               <li class="form-item form-dropdown-item" id="form--service-of-interest-item">
                 <div class="form-dropdown-item__panel">
-                  <button
+                  <div
                     class="form-dropdown-item__button"
                     aria-controls="dropdown"
                     aria-expanded="false"
+                    tabindex="0"
                   >
                     ..Service of interest..
-                  </button>
+                  </div>
                   <div class="form-dropdown-item__arrow"></div>
                   <div class="form-item__info tooltiped">
                     !
@@ -908,7 +910,7 @@
               <span id="span1">Mahmood.fazile7005@gmail.com</span></a
             >
             <div
-              class="clipboard-icon tooltiped tooltiped_hover-focus _copy-to-clipboard"
+              class="clipboard-icon tooltiped tooltiped _copy-to-clipboard"
               data-copy-target="span1"
               tabindex="0"
             >

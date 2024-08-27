@@ -54,15 +54,17 @@
   }
 
   dropdownButton.addEventListener('click', (e) => {
-    e.preventDefault();
     toggleDropdown();
+  });
+  dropdownButton.addEventListener('keydown', (e) => {
+    if (e.code === 'Enter') dropdownButton.click();
   });
   dropdownArrow.addEventListener('click', () => dropdownButton.click());
 
   window.addEventListener(
     'keydown',
     (e) => {
-      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
+      if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
         e.preventDefault();
       }
     },
@@ -89,6 +91,19 @@
 // form handling
 (function () {
   const formItems = document.getElementsByClassName('form-item');
+  const formItemsArray = Array.from(formItems);
+
+  function validationAPIErorrs() {
+    if (this.input.validity.valid) return [];
+    const validityObj = this.input.validity;
+    const errorsMap = this.errorsMap;
+    const errorArray = [];
+    for (const error of Object.keys(validityObj.__proto__)) {
+      if (!validityObj[error]) continue;
+      errorArray.push(errorsMap[error]);
+    }
+    return errorArray;
+  }
 
   const nameFormItem = document.getElementById('form--name-item');
   nameFormItem.label = nameFormItem.querySelector('label');
@@ -98,6 +113,9 @@
   };
   nameFormItem.warningsMap = {
     wrongName: 'Your name cannot be "Name"',
+  };
+  nameFormItem.checkErrors = function () {
+    return validationAPIErorrs.call(this);
   };
   nameFormItem.checkWarnings = function () {
     const warnings = [];
@@ -112,10 +130,13 @@
     typeMismatch: 'Input valid email address',
   };
   emailFormItem.warningsMap = {
-    wrongEmail: 'Real email cannot have @example domain',
+    wrongEmail: 'Contact email cannot have @example domain',
   };
   emailFormItem.infosMap = {
     tip: 'This email will only be used to contact you. Dont be afraid of spam',
+  };
+  emailFormItem.checkErrors = function () {
+    return validationAPIErorrs.call(this);
   };
   emailFormItem.checkWarnings = function () {
     const warnings = [];
@@ -132,6 +153,9 @@
   phoneFormItem.warningsMap = {
     wrongPhone: 'Your phone cannot be 123456789',
   };
+  phoneFormItem.checkErrors = function () {
+    return validationAPIErorrs.call(this);
+  };
   phoneFormItem.checkWarnings = function () {
     const warnings = [];
     if (this.input.value === '123456789') warnings.push(this.warningsMap.wrongPhone);
@@ -140,8 +164,12 @@
 
   const serviceOfInterestFormItem = document.getElementById('form--service-of-interest-item');
   serviceOfInterestFormItem.input = serviceOfInterestFormItem.querySelector('input');
-  serviceOfInterestFormItem.infoContent =
-    serviceOfInterestFormItem.querySelector('.tooltip__content');
+  serviceOfInterestFormItem.errorsMap = {};
+  serviceOfInterestFormItem.otherOptionSelected = function () {
+    return !!serviceOfInterestFormItem.querySelector(
+      '.form-dropdown-item__item:last-child :checked',
+    );
+  };
 
   const timelineFormItem = document.getElementById('form--timeline-item');
   timelineFormItem.input = timelineFormItem.querySelector('input');
@@ -154,21 +182,22 @@
     valueOverflow: 'Your input too long',
   };
   projectDetailsFormItem.infosMap = {
-    tip: 'Describe project you are interested in or select one of listed categories above, except "Other"',
+    nowRequired:
+      'Describe project you are interested in or select one of listed categories above, except "Other"',
+  };
+  projectDetailsFormItem.checkErrors = function () {
+    return validationAPIErorrs.call(this);
+  };
+  projectDetailsFormItem.checkInfos = function () {
+    const infos = [];
+    if (serviceOfInterestFormItem.otherOptionSelected()) infos.push(this.infosMap.nowRequired);
+    return infos;
   };
 
   const form = document.querySelector('form');
 
   function errors() {
-    if (this.input.validity.valid) return [];
-    const validityObj = this.input.validity;
-    const errorsMap = this.errorsMap;
-    const errorArray = [];
-    for (const error of Object.keys(validityObj.__proto__)) {
-      if (!validityObj[error]) continue;
-      errorArray.push(errorsMap[error]);
-    }
-    return errorArray;
+    return this.checkErrors ? this.checkErrors() : [];
   }
 
   function warnings() {
@@ -191,38 +220,6 @@
     };
   }
 
-  function insertEventListener(type, callback, options) {
-    this.addEventListener(type, callback, options);
-    this.setAttribute('listener', 'true');
-  }
-
-  function ejectEventListener(type, callback, options) {
-    this.removeEventListener(type, callback, options);
-    this.removeAttribute('listener');
-  }
-
-  const validateOnSubmit = (function () {
-    const formItemsArray = Array.from(formItems);
-    return function () {
-      formItemsArray.forEach((formItem) => {
-        validate.call(formItem);
-        const ffi = new FormFieldInfo(formItem.querySelector('.tooltip__content'), formItem);
-        ffi.mount();
-      });
-    };
-  })();
-
-  function resetValidators() {
-    Array.from(formItems).forEach((formItem) => {
-      if (!formItem.input.getAttribute('listener')) {
-        insertEventListener.call(formItem.input, 'input', (e) => {
-          validate.call(formItem);
-        });
-      }
-    });
-  }
-  resetValidators();
-
   serviceOfInterestFormItem.addEventListener('input', (e) => {
     if (e.target.closest('.form-dropdown-item__item:last-child')) {
       projectDetailsFormItem.input.setAttribute('required', '');
@@ -237,33 +234,24 @@
 
   class FormFieldInfo {
     #node = undefined;
-    #asociatedFormControll = undefined;
+    #asociatedFormItem = undefined;
 
-    // `
-    //     <ul class="ffi-categories">
-    //         <li class="ffi-category ffi-errors-container">
-    //           <ul class="ffi-errors">
-    //           </ul>
-    //         </li>
-    //         <li class="ffi-category ffi-warnings-container">
-    //           <ul class="ffi-warnings">
-    //           </ul>
-    //         </li>
-    //         <li class="ffi-category ffi-infos-container">
-    //           <ul class="ffi-infos">
-    //           </ul>
-    //         </li>
-    //       </ul>`
-
-    constructor(node, asociatedFormControll) {
+    constructor(node, asociatedFormItem) {
       this.#node = node;
-      this.#asociatedFormControll = asociatedFormControll;
+      this.#asociatedFormItem = asociatedFormItem;
     }
 
-    mount() {
-      const content = this.#asociatedFormControll.infoContent;
+    isEmpty() {
+      const content = this.#asociatedFormItem.infoContent;
+      if (!content) return true;
+      return !content.errors.length && !content.warnings.length && !content.infos.length;
+    }
 
+    reset() {
       this.#node.innerHTML = '';
+
+      if (this.isEmpty()) return;
+      const content = this.#asociatedFormItem.infoContent;
 
       const markupContainer = document.createElement('div');
       markupContainer.className = 'ffi-container';
@@ -326,6 +314,35 @@
     }
   }
 
+  function initFormFieldInfos() {
+    formItemsArray.forEach((formItem) => {
+      formItem.ffi = new FormFieldInfo(formItem.querySelector('.tooltip__content'), formItem);
+    });
+  }
+  initFormFieldInfos();
+
+  function updateFormItemInfoVisibility() {
+    formItemsArray.forEach((formItem) => {
+      if (formItem.ffi.isEmpty()) {
+        formItem.querySelector('.form-item__info').classList.add('no-info');
+      } else {
+        formItem.querySelector('.form-item__info').classList.remove('no-info');
+      }
+    });
+  }
+  updateFormItemInfoVisibility();
+
+  function handleFormSubmittability() {
+    if (form.querySelector('.form-item__info:not(.no-info)')) {
+      form.classList.add('requires-user-attention');
+    } else {
+      form.classList.remove('requires-user-attention');
+    }
+  }
+  function checkFormSubmitability() {
+    return !form.classList.contains('requires-user-attention');
+  }
+
   //setup popover for successfull form submission
 
   const popover = {
@@ -369,16 +386,42 @@
     popover.forceClose();
   });
 
+  function validateOnSubmit() {
+    formItemsArray.forEach((formItem) => {
+      validate.call(formItem);
+      formItemsArray.forEach((formItem) => {
+        updateFormItemInfoVisibility();
+        formItem.ffi.reset();
+        handleFormSubmittability();
+      });
+    });
+  }
+
+  function initFormItemsProcessingOnInput() {
+    formItemsArray.forEach((formItem) => {
+      formItem.addEventListener('input', (e) => {
+        formItemsArray.forEach((formItem) => {
+          validate.call(formItem);
+          updateFormItemInfoVisibility();
+          formItem.ffi.reset();
+          handleFormSubmittability();
+        });
+      });
+    });
+  }
+  initFormItemsProcessingOnInput();
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
     // form validation
     validateOnSubmit();
-    if (!form.checkValidity()) {
+
+    if (!checkFormSubmitability()) {
       document.getElementById('contact-me').scrollIntoView();
       setTimeout(() => {
-        Array.from(formItems).forEach((formItem) => {
-          if (!formItem.input.validity.valid) {
+        formItemsArray.forEach((formItem) => {
+          if (!formItem.ffi.isEmpty()) {
             formItem
               .querySelector('.form-item__info')
               .animate(
@@ -429,7 +472,7 @@
   });
 })();
 
-//toggle sticky header
+// toggle sticky header
 (function () {
   const header = document.querySelector('header');
   function handler(e) {
@@ -522,7 +565,7 @@
   });
 })();
 
-//copy to clipboard logic
+// copy to clipboard logic
 (function () {
   const copies = Array.from(document.querySelectorAll('._copy-to-clipboard'));
   copies.forEach((copy) => {
