@@ -59,16 +59,6 @@
   });
   dropdownArrow.addEventListener('click', () => dropdownButton.click());
 
-  window.addEventListener(
-    'keydown',
-    (e) => {
-      if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
-        e.preventDefault();
-      }
-    },
-    false,
-  );
-
   dropdownButton.addEventListener('keydown', (e) => {
     if (e.code === 'Tab') return;
     if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
@@ -439,6 +429,14 @@
   handler();
 })();
 
+// category filter
+(function () {
+  const categoriesContainer = document.querySelector('.categories-container');
+  categoriesContainer.addEventListener('click', (e) => {
+    e.target.closest('.category-container')?.querySelector('input').click();
+  });
+})();
+
 // setup swiper
 (function () {
   let swiper,
@@ -476,7 +474,7 @@
   // Filtering portfolio-projects by category
   const projectsContainer = document.querySelector('.portfolio-projects');
   const portfolioProjects = Array.from(document.querySelectorAll('.portfolio-project'));
-  document.querySelectorAll('.category').forEach((category) => {
+  document.querySelectorAll('.category-container').forEach((category) => {
     category.addEventListener('input', () => {
       let slidesCount = 0;
       const choosenCategory = category.dataset.category;
@@ -530,7 +528,7 @@
     const tooltipContent = copy.querySelector('.tooltip__content');
     const tooltipText = { initial: 'copy', replaced: 'copied!' };
 
-    const handler = (() => {
+    const textChangeHandler = (() => {
       let timeout;
       return function () {
         clearTimeout(timeout);
@@ -540,7 +538,7 @@
       };
     })();
 
-    copy.addEventListener('blur', handler);
+    copy.addEventListener('blur', textChangeHandler);
     copy.addEventListener('mouseleave', () => {
       copy.blur();
     });
@@ -563,15 +561,4 @@
   function writeTextToTooltip() {
     const tooltips = document.querySelector();
   }
-})();
-
-// category filter
-(function () {
-  const categoryFilter = document.querySelector('.category-filter');
-  categoryFilter.addEventListener('keypress', (e) => {
-    if (e.code !== 'Enter') return;
-    if (e.target.classList.contains('category')) {
-      e.target.click();
-    }
-  });
 })();

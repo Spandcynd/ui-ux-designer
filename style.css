@@ -214,7 +214,6 @@ main {
 .achivements {
   margin-top: 5em;
   display: flex;
-  width: fit-content;
   padding: 1.5em;
   background-color: var(--color-background-1d);
   border-radius: 0.5em;
@@ -666,7 +665,7 @@ main {
 .portfolio {
   text-align: center;
 }
-.category-filter {
+.categories-container {
   margin-top: 2.5em;
   width: 90%;
   margin-inline: auto;
@@ -676,7 +675,18 @@ main {
   flex-wrap: wrap;
 }
 
-.category-filter label {
+.category-container label {
+  /* 
+  there are two - keyboard and mouse (or other pointer device) navigation
+  there are two - native (browser) and custom click delegation
+  total number of created clicks may consist of:
+    a) your click on element + your delegations + browser delegations 
+    b) you reach a radiobutton with keyboard and browser clicks on it   
+  workaround to disable native label-to-input click delegation */
+  pointer-events: none;
+}
+
+.categories-container .category-container {
   background-color: var(--color-background-0d);
   padding: 0.875em 2.5em;
   color: var(--color-main-1d-plus-x3);
@@ -687,29 +697,22 @@ main {
   cursor: pointer;
   transition: scale 0.1s;
   position: relative;
-  /* Бефор позиционирован абсолютно, а у лейба не создавала новый стекинг контекст
-    но при навидении на лейбу она скейлилась, это заставляло ее создать стекинг контекст 
-    и бефор позиционировался относительно лейбы как и надо. Добавил позишн релатив чтобы 
-    бефор позиционаровался относительной своей лейбы / ????
-  */
-  &:where(:hover, :focus) {
+
+  &:where(:hover, :focus-within) {
     scale: 1.03;
   }
-  &:focus {
+  &:focus-within {
     outline: 1px solid var(--color-main-0d);
   }
 }
-.category-filter label:has(input[type='radio']:checked) {
+.categories-container .category-container:has(input[type='radio']:checked) {
   color: white;
 }
-.category-filter label::before {
+.categories-container .category-container::before {
   background-image: linear-gradient(115deg, var(--color-accent-0d), var(--color-accent-1d));
 }
-.category-filter label:has(input[type='radio']:checked)::before {
+.categories-container .category-container:has(input[type='radio']:checked)::before {
   opacity: 1;
-}
-.category-filter input[type='radio'] {
-  display: none;
 }
 
 .portfolio-projects {
@@ -773,10 +776,10 @@ main {
 }
 
 @media (max-width: 640px) {
-  .category-filter {
+  .categories-container {
     gap: 0.875em;
   }
-  .category-filter label {
+  .categories-container .category-container {
     padding: 0.675em 1.25em;
   }
 }

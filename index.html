@@ -29,7 +29,7 @@
     </svg>
     <header>
       <div class="container">
-        <a href="#main" class="sr-only">Skip to main content</a>
+        <a href="#main" class="sr-only_not-focus">Skip to main content</a>
         <div class="main-nav-burger">
           <div class="main-nav-burger__controller">
             <div class="main-nav-burger__line1"></div>
@@ -169,18 +169,18 @@
                 ><a href="#" class="buttonlink-secondary">Download CV</a>
               </div>
               <div class="achivements">
-                <div class="achivements__achivement">
-                  <div class="achivement__value">5+</div>
-                  <div class="achivement__name">Experiences</div>
-                </div>
-                <div class="achivements__achivement">
-                  <div class="achivement__value">20+</div>
-                  <div class="achivement__name">Projects done</div>
-                </div>
-                <div class="achivements__achivement">
-                  <div class="achivement__value">80+</div>
-                  <div class="achivement__name">Happy Clients</div>
-                </div>
+                <p class="achivements__achivement" role="paragraph">
+                  <span class="achivement__value">5+</span>
+                  <span class="achivement__name">Experiences</span>
+                </p>
+                <p class="achivements__achivement" role="paragraph">
+                  <span class="achivement__value">20+</span>
+                  <span class="achivement__name">Projects done</span>
+                </p>
+                <p class="achivements__achivement" role="paragraph">
+                  <span class="achivement__value">80+</span>
+                  <span class="achivement__name">Happy Clients</span>
+                </p>
               </div>
             </div>
             <div class="hero__second-block">
@@ -397,8 +397,8 @@
                   <circle cx="50%" cy="50%" r="45%" class="front" fill="none" />
                 </svg>
               </div>
-              <span class="skill__value">100%</span><br />
-              <span class="skill__name">Figma</span>
+              <div class="skill__value">100%</div>
+              <div class="skill__name">Figma</div>
               <dialog class="skill__modal modal-skill">
                 <div class="modal-skill__wrapper">
                   <div class="modal-skill__name">Figma</div>
@@ -446,8 +446,8 @@
                   <circle cx="50%" cy="50%" r="45%" class="front" fill="none" />
                 </svg>
               </div>
-              <span class="skill__value">100%</span><br />
-              <span class="skill__name">Adobe XD</span>
+              <div class="skill__value">100%</div>
+              <div class="skill__name">Adobe XD</div>
               <dialog class="skill__modal modal-skill">
                 <div class="modal-skill__wrapper">
                   <div class="modal-skill__name">Adobe XD</div>
@@ -471,8 +471,8 @@
                   <circle cx="50%" cy="50%" r="45%" class="front" fill="none" />
                 </svg>
               </div>
-              <span class="skill__value">85%</span><br />
-              <span class="skill__name">Adobe Photoshop</span>
+              <div class="skill__value">85%</div>
+              <div class="skill__name">Adobe Photoshop</div>
               <dialog class="skill__modal modal-skill">
                 <div class="modal-skill__wrapper">
                   <div class="modal-skill__name">Adobe Photoshop</div>
@@ -494,8 +494,8 @@
                   <circle cx="50%" cy="50%" r="45%" class="front" fill="none" />
                 </svg>
               </div>
-              <span class="skill__value">60%</span><br />
-              <span class="skill__name">Adobe Illustrator</span>
+              <div class="skill__value">60%</div>
+              <div class="skill__name">Adobe Illustrator</div>
               <dialog class="skill__modal modal-skill">
                 <div class="modal-skill__wrapper">
                   <div class="modal-skill__name">Adobe Illustrator</div>
@@ -513,8 +513,8 @@
                   <circle cx="50%" cy="50%" r="45%" class="front" fill="none" />
                 </svg>
               </div>
-              <span class="skill__value">70%</span><br />
-              <span class="skill__name">Adobe Premiere</span>
+              <div class="skill__value">70%</div>
+              <div class="skill__name">Adobe Premiere</div>
               <dialog class="skill__modal modal-skill">
                 <div class="modal-skill__wrapper">
                   <div class="modal-skill__name">Adobe Premiere</div>
@@ -531,23 +531,31 @@
         </section>
         <section class="portfolio" id="portfolio">
           <h2 class="section-title">Portfolio</h2>
-          <div class="category-filter">
-            <label tabindex="0" class="category bg-transition_bef" data-category="all"
-              ><span>All</span><input type="radio" name="category" checked
-            /></label>
-            <label tabindex="0" class="category bg-transition_bef" data-category="Website Design"
-              ><span>Website Design</span><input type="radio" name="category"
-            /></label>
-            <label tabindex="0" class="category bg-transition_bef" data-category="App Mobile Design"
-              ><span>App Mobile Design</span><input type="radio" name="category"
-            /></label>
-            <label tabindex="0" class="category bg-transition_bef" data-category="App Desktop"
-              ><span>App Desktop</span><input type="radio" name="category"
-            /></label>
-            <label tabindex="0" class="category bg-transition_bef" data-category="Braiding"
-              ><span>Braiding</span><input type="radio" name="category"
-            /></label>
-          </div>
+          <fieldset class="category-filter">
+            <legend class="sr-only">Select one of categories</legend>
+            <div class="categories-container">
+              <div class="category-container bg-transition_bef" data-category="all">
+                <input id="input1" class="sr-only" type="radio" name="category" checked />
+                <label for="input1">All</label>
+              </div>
+              <div class="category-container bg-transition_bef" data-category="Website Design">
+                <input id="input2" class="sr-only" type="radio" name="category" />
+                <label for="input2">Website Design</label>
+              </div>
+              <div class="category-container bg-transition_bef" data-category="App Mobile Design">
+                <input id="input3" class="sr-only" type="radio" name="category" />
+                <label for="input3">App Mobile Design</label>
+              </div>
+              <div class="category-container bg-transition_bef" data-category="App Desktop">
+                <input id="input4" class="sr-only" type="radio" name="category" />
+                <label for="input4">App Desktop</label>
+              </div>
+              <div class="category-container bg-transition_bef" data-category="Braiding">
+                <input id="input5" class="sr-only" type="radio" name="category" />
+                <label for="input5">Braiding</label>
+              </div>
+            </div>
+          </fieldset>
           <div class="swiper">
             <div class="portfolio-projects swiper-wrapper">
               <portfolio-project
@@ -557,8 +565,8 @@
               >
                 <picture slot="image">
                   <source srcset="project1-min.png" media="(max-width: 768px)" />
-                  <img loading="lazy" src="project1.png" alt="web project" /> </picture
-                ><span slot="name"> Project 1</span>
+                  <img loading="lazy" src="project1.png" alt="web project" /></picture
+                ><span slot="name">Project 1</span>
                 <span slot="category">Website Design</span>
               </portfolio-project>
               <portfolio-project
@@ -783,6 +791,12 @@
               </li>
             </ul>
             <button class="buttonlink-secondary">Send</button>
+            <div class="popover hidden" id="form-popover">
+              <div class="popover__content">
+                <svg><use href="#svg-check-mark"></use></svg>
+                <span>Form successfully submited</span>
+              </div>
+            </div>
           </form>
         </section>
       </div>
@@ -948,7 +962,7 @@
               <span id="span2">+93 729 107 005</span></a
             >
             <div
-              class="clipboard-icon tooltiped _copy-to-clipboard"
+              class="clipboard-icon tooltiped tooltiped_hover-focus _copy-to-clipboard"
               data-copy-target="span2"
               tabindex="0"
             >
@@ -966,7 +980,7 @@
                   </g>
                 </g>
               </svg>
-              <div class="tooltip _tooltip-modifiable">
+              <div class="tooltip">
                 <div class="tooltip__wrapper">
                   <div class="tooltip__content">copy</div>
                 </div>
@@ -974,13 +988,7 @@
             </div>
           </div>
         </div>
-        <div class="credentials">Designed by @mahmood.fazile UI/UX designer</div>
-      </div>
-      <div class="popover hidden" id="form-popover">
-        <div class="popover__content">
-          <svg><use href="#svg-check-mark"></use></svg>
-          <span>Form successfully submited</span>
-        </div>
+        <div class="credentials" role="doc-credit">Designed by @mahmood.fazile UI/UX designer</div>
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

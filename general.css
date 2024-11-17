@@ -243,7 +243,8 @@ section {
   position: relative;
 }
 
-.sr-only:not(:focus) {
+.sr-only,
+.sr-only_not-focus:not(:focus) {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -270,7 +271,7 @@ section {
     fill: var(--color-main-1d);
   }
 }
-*:has(> .clipboard-icon):is(:hover, :focus-within) .clipboard-icon {
+*:has(> .clipboard-icon):is(:hover, :focus-within) > .clipboard-icon {
   opacity: 1;
 }
 
@@ -278,7 +279,7 @@ section {
   position: relative;
   cursor: default;
 }
-.tooltiped_hover-focus:is(:hover, :focus-within) .tooltip {
+.tooltiped_hover-focus:is(:hover, :focus) .tooltip {
   opacity: 1;
   transition-delay: 0.55s;
 }
