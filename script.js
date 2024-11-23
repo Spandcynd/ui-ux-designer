@@ -317,46 +317,85 @@
   }
 
   //setup popover for successfull form submission
-
-  const popover = {
-    element: document.getElementById('form-popover'),
-    state: 'hidden',
-    timeout: undefined,
-    show: function () {
-      if (this.state === 'visible') return;
-      this.element.classList.remove('hidden');
-      this.updateState();
+  const formSubmissionNotification = {
+    views: [],
+    open: function () {
+      this.views.forEach((view) => view._open());
     },
-    hide: function () {
-      if (this.state === 'hidden') return;
-      this.element.classList.add('hidden');
-      this.updateState();
-    },
-    updateState: function () {
-      this.state = this.element.classList.contains('hidden') ? 'hidden' : 'visible';
-    },
-    timeoutHide: function (time) {
-      this.clearTimeout();
-      this.timeout = setTimeout(() => {
-        this.hide();
-        this.clearTimeout();
-      }, time);
-    },
-    clearTimeout: function () {
-      this.timeout = clearTimeout(this.timeout);
-    },
-    pop: function () {
-      this.show();
-      this.timeoutHide(5000);
-    },
-    forceClose: function () {
-      this.hide();
-      this.clearTimeout();
+    close: function () {
+      this.views.forEach((view) => view._close());
     },
   };
 
-  popover.element.addEventListener('click', (e) => {
-    popover.forceClose();
+  const popoverNotification = {
+    element: document.getElementById('form-popover'),
+    state: 'closed',
+    timeout: undefined,
+    _open: function () {
+      if (this.state === 'opened') return;
+      this.element.classList.remove('closed');
+      this.state = 'opened';
+
+      this._clearTimeout();
+      this.timeout = setTimeout(() => {
+        this.requestClosure();
+        this._clearTimeout();
+      }, 5000);
+    },
+    _close: function () {
+      if (this.state === 'closed') return;
+      this.element.classList.add('closed');
+      this.state = 'closed';
+    },
+    _clearTimeout: function () {
+      this.timeout = clearTimeout(this.timeout);
+    },
+    forceClose: function () {
+      this.requestClosure();
+      this._clearTimeout();
+    },
+    requestOpening: function () {
+      formSubmissionNotification.open();
+    },
+    requestClosure: function () {
+      formSubmissionNotification.close();
+    },
+  };
+
+  const alertNotification = {
+    element: document.getElementById('form-submission-alert'),
+    state: 'closed',
+    _open: function () {
+      if (this.state === 'opened') return;
+      this.element.classList.remove('closed');
+      this.state = 'opened';
+
+      this._clearTimeout();
+      this.timeout = setTimeout(() => {
+        this.requestClosure();
+        this._clearTimeout();
+      }, 7000);
+    },
+    _close: function () {
+      if (this.state === 'closed') return;
+      this.element.classList.add('closed');
+      this.state = 'closed';
+    },
+    _clearTimeout: function () {
+      this.timeout = clearTimeout(this.timeout);
+    },
+    requestOpening: function () {
+      formSubmissionNotification.open();
+    },
+    requestClosure: function () {
+      formSubmissionNotification.close();
+    },
+  };
+
+  formSubmissionNotification.views = [popoverNotification, alertNotification];
+
+  popoverNotification.element.addEventListener('click', (e) => {
+    popoverNotification.forceClose();
   });
 
   form.addEventListener('submit', function (e) {
@@ -405,7 +444,8 @@
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
 
-    popover.pop();
+    // popover.pop();
+    formSubmissionNotification.open();
   });
 })();
 

@@ -333,7 +333,7 @@ section {
   z-index: 999;
   white-space: nowrap;
 }
-.popover.hidden {
+.popover.closed {
   opacity: 0;
   bottom: -100px;
 }
@@ -347,7 +347,7 @@ section {
   background: white;
   animation: progressbar 5s linear forwards;
 }
-.popover.hidden::after {
+.popover.closed::after {
   animation: none;
   background: none;
 }
@@ -373,6 +373,10 @@ section {
 }
 .popover__content span {
   color: var(--color-accent-0d);
+}
+
+.sr-alert.closed {
+  display: none;
 }
 
 img[alt] {
