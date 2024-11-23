@@ -790,13 +790,8 @@
                 </div>
               </li>
             </ul>
-            <button class="buttonlink-secondary">
-              Send
-              <span class="sr-only"
-                >. This button opens popover, which closes automatically in 5 seconds</span
-              >
-            </button>
-            <div class="popover closed" aria-hidden="true" id="form-popover">
+            <button class="buttonlink-secondary">Send</button>
+            <div class="popover hidden" aria-hidden="true" id="form-popover">
               <div class="popover__content">
                 <svg><use href="#svg-check-mark"></use></svg>
                 <span id="popover-title">Form successfully submited</span>
@@ -1003,7 +998,7 @@
         <div class="credentials">Designed by @mahmood.fazile UI/UX designer</div>
       </div>
     </footer>
-    <div class="sr-only sr-alert closed" role="alert" id="form-submission-alert">
+    <div class="sr-only sr-alert hidden" role="alert" id="form-submission-alert">
       Form successfully submited
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

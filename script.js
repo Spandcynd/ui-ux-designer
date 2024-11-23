@@ -317,86 +317,80 @@
   }
 
   //setup popover for successfull form submission
-  const formSubmissionNotification = {
-    views: [],
-    open: function () {
-      this.views.forEach((view) => view._open());
-    },
-    close: function () {
-      this.views.forEach((view) => view._close());
-    },
-  };
 
   const popoverNotification = {
     element: document.getElementById('form-popover'),
-    state: 'closed',
-    timeout: undefined,
-    _open: function () {
-      if (this.state === 'opened') return;
-      this.element.classList.remove('closed');
-      this.state = 'opened';
-
-      this._clearTimeout();
-      this.timeout = setTimeout(() => {
-        this.requestClosure();
-        this._clearTimeout();
-      }, 5000);
+    state: 'hidden',
+    _lclShow: function () {
+      if (this.state === 'visible') return;
+      this.element.classList.remove('hidden');
+      this.state = 'visible';
     },
-    _close: function () {
-      if (this.state === 'closed') return;
-      this.element.classList.add('closed');
-      this.state = 'closed';
+    _lclHide: function () {
+      if (this.state === 'hidden') return;
+      this.element.classList.add('hidden');
+      this.state = 'hidden';
     },
-    _clearTimeout: function () {
-      this.timeout = clearTimeout(this.timeout);
+    activate: function () {
+      this._lclShow();
+      this._hideWithThrottle();
     },
-    forceClose: function () {
-      this.requestClosure();
-      this._clearTimeout();
-    },
-    requestOpening: function () {
-      formSubmissionNotification.open();
-    },
-    requestClosure: function () {
-      formSubmissionNotification.close();
-    },
+    ...(function () {
+      let timeout = undefined;
+      return {
+        hideImmediately: function () {
+          this._lclHide();
+          clearTimeout(timeout);
+          timeout = undefined;
+        },
+        _hideWithThrottle: function () {
+          if (timeout) return;
+          timeout = setTimeout(() => {
+            this._lclHide();
+            timeout = undefined;
+          }, 5000);
+        },
+      };
+    })(),
   };
 
   const alertNotification = {
     element: document.getElementById('form-submission-alert'),
-    state: 'closed',
-    _open: function () {
-      if (this.state === 'opened') return;
-      this.element.classList.remove('closed');
-      this.state = 'opened';
-
-      this._clearTimeout();
-      this.timeout = setTimeout(() => {
-        this.requestClosure();
-        this._clearTimeout();
-      }, 7000);
+    state: 'hidden',
+    _lclShow: function () {
+      if (this.state === 'visible') return;
+      this.element.classList.remove('hidden');
+      this.state = 'visible';
     },
-    _close: function () {
-      if (this.state === 'closed') return;
-      this.element.classList.add('closed');
-      this.state = 'closed';
+    _lclHide: function () {
+      if (this.state === 'hidden') return;
+      this.element.classList.add('hidden');
+      this.state = 'hidden';
     },
-    _clearTimeout: function () {
-      this.timeout = clearTimeout(this.timeout);
+    activate: function () {
+      this._lclShow();
+      this._hideWithThrottle();
     },
-    requestOpening: function () {
-      formSubmissionNotification.open();
-    },
-    requestClosure: function () {
-      formSubmissionNotification.close();
-    },
+    _hideWithThrottle: (function () {
+      let timeout = undefined;
+      return function () {
+        if (timeout) return;
+        timeout = setTimeout(() => {
+          this._lclHide();
+          timeout = undefined;
+        }, 500);
+      };
+    })(),
   };
 
-  formSubmissionNotification.views = [popoverNotification, alertNotification];
-
   popoverNotification.element.addEventListener('click', (e) => {
-    popoverNotification.forceClose();
+    popoverNotification.hideImmediately();
   });
+
+  function notifySuccessfullSubmission() {
+    popoverNotification.activate();
+    alertNotification.activate();
+  }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -444,8 +438,7 @@
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
 
-    // popover.pop();
-    formSubmissionNotification.open();
+    notifySuccessfullSubmission();
   });
 })();
 
