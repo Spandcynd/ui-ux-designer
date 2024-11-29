@@ -553,45 +553,45 @@
   });
 })();
 
-//copy to clipboard logic
+//copy to clipboard
 (function () {
   const copies = Array.from(document.querySelectorAll('._copy-to-clipboard'));
+  // Visual
+  const tooltipText = { initial: 'copy', replaced: 'copied!' };
+  // Visual end
+  // SR
+  const copiedAlert = document.getElementById('copied-alert');
+  // SR end
   copies.forEach((copy) => {
     const target = document.getElementById(copy.dataset.copyTarget);
+    // Visual
     const tooltipContent = copy.querySelector('.tooltip__content');
-    const tooltipText = { initial: 'copy', replaced: 'copied!' };
 
-    const textChangeHandler = (() => {
-      let timeout;
-      return function () {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          tooltipContent.innerText = tooltipText.initial;
-        }, 550);
-      };
-    })();
-
-    copy.addEventListener('blur', textChangeHandler);
+    copy.addEventListener('blur', () => {
+      setTimeout(() => {
+        tooltipContent.innerText = tooltipText.initial;
+      }, 550);
+    });
     copy.addEventListener('mouseleave', () => {
       copy.blur();
     });
+    // Visual end
 
     copy.onclick = function () {
       window.navigator.clipboard.writeText(target.textContent);
+      // Visual
       tooltipContent.innerText = tooltipText.replaced;
+      // Visual end
+
+      // SR
+      copiedAlert.classList.add('hidden');
+      setTimeout(() => {
+        copiedAlert.classList.remove('hidden');
+      }, 50);
+      // SR end
     };
     copy.addEventListener('keypress', (e) => {
-      if (e.code === 'Enter') copy.click();
+      if (['Enter', 'Space'].includes(e.code)) copy.click();
     });
   });
-
-  // const tooltipContent = target.classList.contains('_tooltip-modifiable')
-  //   ? target.querySelector('tooltip__content')
-  //   : null;
-  function copyToClipboard() {
-    window.navigator.clipboard.writeText(target.textContent);
-  }
-  function writeTextToTooltip() {
-    const tooltips = document.querySelector();
-  }
 })();

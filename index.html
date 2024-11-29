@@ -931,6 +931,7 @@
               class="clipboard-icon tooltiped tooltiped_hover-focus _copy-to-clipboard"
               data-copy-target="span1"
               tabindex="0"
+              aria-label="copy email"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" role="none">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -948,7 +949,7 @@
               </svg>
               <div class="tooltip">
                 <div class="tooltip__wrapper">
-                  <div class="tooltip__content" aria-live="polite">copy</div>
+                  <div class="tooltip__content" aria-hidden="true">copy</div>
                 </div>
               </div>
             </div>
@@ -972,6 +973,7 @@
               class="clipboard-icon tooltiped tooltiped_hover-focus _copy-to-clipboard"
               data-copy-target="span2"
               tabindex="0"
+              aria-label="copy phone number"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" role="none">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -989,7 +991,7 @@
               </svg>
               <div class="tooltip">
                 <div class="tooltip__wrapper">
-                  <div class="tooltip__content">copy</div>
+                  <div class="tooltip__content" aria-hidden="true">copy</div>
                 </div>
               </div>
             </div>
@@ -1001,6 +1003,7 @@
     <div class="sr-only sr-alert hidden" role="alert" id="form-submission-alert">
       Form successfully submited
     </div>
+    <div class="sr-only sr-alert hidden" role="alert" id="copied-alert">copied successfully</div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="portfolio-project.js"></script>
     <script src="script.js"></script>
