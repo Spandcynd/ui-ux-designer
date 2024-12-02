@@ -78,352 +78,104 @@
 
 // form handling
 (function () {
-  const formItems = document.getElementsByClassName('form-item');
-
-  const nameFormItem = document.getElementById('form--name-item');
-  nameFormItem.label = nameFormItem.querySelector('label');
-  nameFormItem.input = nameFormItem.querySelector('input');
-  nameFormItem.errorsMap = {
-    valueMissing: 'You have to input your name',
-  };
-  nameFormItem.warningsMap = {
-    wrongName: 'Your name cannot be "Name"',
-  };
-  nameFormItem.checkWarnings = function () {
-    const warnings = [];
-    if (this.input.value.toLowerCase() === 'name') warnings.push(this.warningsMap.wrongName);
-    return warnings;
-  };
-
-  const emailFormItem = document.getElementById('form--email-item');
-  emailFormItem.input = emailFormItem.querySelector('input');
-  emailFormItem.errorsMap = {
-    valueMissing: 'You have to input your email',
-    typeMismatch: 'Input valid email address',
-  };
-  emailFormItem.warningsMap = {
-    wrongEmail: 'Real email cannot have @example domain',
-  };
-  emailFormItem.infosMap = {
-    tip: 'This email will only be used to contact you. Dont be afraid of spam',
-  };
-  emailFormItem.checkWarnings = function () {
-    const warnings = [];
-    if (this.input.value.includes('@example')) warnings.push(this.warningsMap.wrongEmail);
-    return warnings;
-  };
-
-  const phoneFormItem = document.getElementById('form--tel-item');
-  phoneFormItem.input = phoneFormItem.querySelector('input');
-  phoneFormItem.errorsMap = {
-    valueMissing: 'You have to input your phone',
-    patternMismatch: 'Input valid phone number',
-  };
-  phoneFormItem.warningsMap = {
-    wrongPhone: 'Your phone cannot be 123456789',
-  };
-  phoneFormItem.checkWarnings = function () {
-    const warnings = [];
-    if (this.input.value === '123456789') warnings.push(this.warningsMap.wrongPhone);
-    return warnings;
-  };
-
-  const serviceOfInterestFormItem = document.getElementById('form--service-of-interest-item');
-  serviceOfInterestFormItem.input = serviceOfInterestFormItem.querySelector('input');
-  serviceOfInterestFormItem.infoContent =
-    serviceOfInterestFormItem.querySelector('.tooltip__content');
-
-  const timelineFormItem = document.getElementById('form--timeline-item');
-  timelineFormItem.input = timelineFormItem.querySelector('input');
-
-  const projectDetailsFormItem = document.getElementById('form--project-details-item');
-  projectDetailsFormItem.input = projectDetailsFormItem.querySelector('textarea');
-  projectDetailsFormItem.errorsMap = {
-    valueMissing: 'This field is required',
-    valueUnderflow: 'Your input too short',
-    valueOverflow: 'Your input too long',
-  };
-  projectDetailsFormItem.infosMap = {
-    tip: 'Describe project you are interested in or select one of listed categories above, except "Other"',
-  };
-
   const form = document.querySelector('form');
 
-  function errors() {
-    if (this.input.validity.valid) return [];
-    const validityObj = this.input.validity;
-    const errorsMap = this.errorsMap;
-    const errorArray = [];
-    for (const error of Object.keys(validityObj.__proto__)) {
-      if (!validityObj[error]) continue;
-      errorArray.push(errorsMap[error]);
-    }
-    return errorArray;
-  }
-
-  function warnings() {
-    return this.checkWarnings ? this.checkWarnings() : [];
-  }
-
-  function infos() {
-    return this.checkInfos ? this.checkInfos() : [];
-  }
-
-  function validate() {
-    const errorArray = errors.call(this);
-    const warningsArray = warnings.call(this);
-    const infosArray = infos.call(this);
-
-    this.infoContent = {
-      errors: errorArray,
-      warnings: warningsArray,
-      infos: infosArray,
-    };
-  }
-
-  function insertEventListener(type, callback, options) {
-    this.addEventListener(type, callback, options);
-    this.setAttribute('listener', 'true');
-  }
-
-  function ejectEventListener(type, callback, options) {
-    this.removeEventListener(type, callback, options);
-    this.removeAttribute('listener');
-  }
-
-  const validateOnSubmit = (function () {
-    const formItemsArray = Array.from(formItems);
-    return function () {
-      formItemsArray.forEach((formItem) => {
-        validate.call(formItem);
-        const ffi = new FormFieldInfo(formItem.querySelector('.tooltip__content'), formItem);
-        ffi.mount();
-      });
-    };
-  })();
-
-  function resetValidators() {
-    Array.from(formItems).forEach((formItem) => {
-      if (!formItem.input.getAttribute('listener')) {
-        insertEventListener.call(formItem.input, 'input', (e) => {
-          validate.call(formItem);
-        });
-      }
-    });
-  }
-  resetValidators();
-
-  serviceOfInterestFormItem.addEventListener('input', (e) => {
-    if (e.target.closest('.form-dropdown-item__item:last-child')) {
-      projectDetailsFormItem.input.setAttribute('required', '');
-      projectDetailsFormItem.input.setAttribute('minlength', 10);
-      projectDetailsFormItem.input.setAttribute('maxlength', 250);
-    } else {
-      projectDetailsFormItem.input.removeAttribute('required');
-      projectDetailsFormItem.input.removeAttribute('minlength');
-      projectDetailsFormItem.input.removeAttribute('maxlength');
-    }
-  });
-
-  class FormFieldInfo {
-    #node = undefined;
-    #asociatedFormControll = undefined;
-
-    // `
-    //     <ul class="ffi-categories">
-    //         <li class="ffi-category ffi-errors-container">
-    //           <ul class="ffi-errors">
-    //           </ul>
-    //         </li>
-    //         <li class="ffi-category ffi-warnings-container">
-    //           <ul class="ffi-warnings">
-    //           </ul>
-    //         </li>
-    //         <li class="ffi-category ffi-infos-container">
-    //           <ul class="ffi-infos">
-    //           </ul>
-    //         </li>
-    //       </ul>`
-
-    constructor(node, asociatedFormControll) {
-      this.#node = node;
-      this.#asociatedFormControll = asociatedFormControll;
-    }
-
-    mount() {
-      const content = this.#asociatedFormControll.infoContent;
-
-      this.#node.innerHTML = '';
-
-      const markupContainer = document.createElement('div');
-      markupContainer.className = 'ffi-container';
-      this.#node.appendChild(markupContainer);
-
-      const infoCategories = document.createElement('ul');
-      infoCategories.className = 'ffi-categories';
-      markupContainer.appendChild(infoCategories);
-
-      if (content.errors.length) {
-        const errorsContainer = document.createElement('li');
-        errorsContainer.className = 'ffi-category ffi-errors-container';
-        infoCategories.appendChild(errorsContainer);
-
-        const errors = document.createElement('ul');
-        errors.className = 'ffi-errors';
-        errorsContainer.appendChild(errors);
-
-        for (const errorText of content.errors) {
-          const error = document.createElement('li');
-          error.className = 'ffi-error';
-          error.textContent = errorText;
-          errors.appendChild(error);
-        }
-      }
-
-      if (content.warnings.length) {
-        const warningsContainer = document.createElement('li');
-        warningsContainer.className = 'ffi-category ffi-warnings-container';
-        infoCategories.appendChild(warningsContainer);
-
-        const warnings = document.createElement('ul');
-        warnings.className = 'ffi-warnings';
-        warningsContainer.appendChild(warnings);
-
-        for (const warningText of content.warnings) {
-          const warning = document.createElement('li');
-          warning.className = 'ffi-warning';
-          warning.textContent = warningText;
-          warnings.appendChild(warning);
-        }
-      }
-
-      if (content.infos.length) {
-        const infosContainer = document.createElement('li');
-        infosContainer.className = 'ffi-category ffi-infos-container';
-        infoCategories.appendChild(infosContainer);
-
-        const infos = document.createElement('ul');
-        infos.className = 'ffi-infos';
-        infosContainer.appendChild(infos);
-
-        for (const infosText of content.infos) {
-          const info = document.createElement('li');
-          info.className = 'ffi-info';
-          info.textContent = infosText;
-          infos.appendChild(info);
-        }
-      }
-    }
-  }
+  const formItems = document.getElementsByClassName('form-item');
+  const nameFormItem = document.getElementById('form--name-item');
+  const emailFormItem = document.getElementById('form--email-item');
+  const phoneFormItem = document.getElementById('form--tel-item');
+  const serviceOfInterestFormItem = document.getElementById('form--service-of-interest-item');
+  const timelineFormItem = document.getElementById('form--timeline-item');
+  const projectDetailsFormItem = document.getElementById('form--project-details-item');
 
   //setup popover for successfull form submission
 
-  const popoverNotification = {
-    element: document.getElementById('form-popover'),
-    state: 'hidden',
-    _lclShow: function () {
-      if (this.state === 'visible') return;
-      this.element.classList.remove('hidden');
-      this.state = 'visible';
-    },
-    _lclHide: function () {
-      if (this.state === 'hidden') return;
-      this.element.classList.add('hidden');
-      this.state = 'hidden';
-    },
-    activate: function () {
-      this._lclShow();
-      this._hideWithThrottle();
-    },
-    ...(function () {
-      let timeout = undefined;
-      return {
-        hideImmediately: function () {
-          this._lclHide();
-          clearTimeout(timeout);
-          timeout = undefined;
-        },
-        _hideWithThrottle: function () {
+  const notifySuccessfullSubmission = (function () {
+    const popoverNotification = {
+      element: document.getElementById('form-popover'),
+      state: 'hidden',
+      _lclShow: function () {
+        if (this.state === 'visible') return;
+        this.element.classList.remove('hidden');
+        this.state = 'visible';
+      },
+      _lclHide: function () {
+        if (this.state === 'hidden') return;
+        this.element.classList.add('hidden');
+        this.state = 'hidden';
+      },
+      activate: function () {
+        this._lclShow();
+        this._hideWithThrottle();
+      },
+      ...(function () {
+        let timeout = undefined;
+        return {
+          hideImmediately: function () {
+            this._lclHide();
+            clearTimeout(timeout);
+            timeout = undefined;
+          },
+          _hideWithThrottle: function () {
+            if (timeout) return;
+            timeout = setTimeout(() => {
+              this._lclHide();
+              timeout = undefined;
+            }, 5000);
+          },
+        };
+      })(),
+    };
+
+    const alertNotification = {
+      element: document.getElementById('form-submission-alert'),
+      state: 'hidden',
+      _lclShow: function () {
+        if (this.state === 'visible') return;
+        this.element.classList.remove('hidden');
+        this.state = 'visible';
+      },
+      _lclHide: function () {
+        if (this.state === 'hidden') return;
+        this.element.classList.add('hidden');
+        this.state = 'hidden';
+      },
+      activate: function () {
+        this._lclShow();
+        this._hideWithThrottle();
+      },
+      _hideWithThrottle: (function () {
+        let timeout = undefined;
+        return function () {
           if (timeout) return;
           timeout = setTimeout(() => {
             this._lclHide();
             timeout = undefined;
-          }, 5000);
-        },
-      };
-    })(),
-  };
+          }, 500);
+        };
+      })(),
+    };
 
-  const alertNotification = {
-    element: document.getElementById('form-submission-alert'),
-    state: 'hidden',
-    _lclShow: function () {
-      if (this.state === 'visible') return;
-      this.element.classList.remove('hidden');
-      this.state = 'visible';
-    },
-    _lclHide: function () {
-      if (this.state === 'hidden') return;
-      this.element.classList.add('hidden');
-      this.state = 'hidden';
-    },
-    activate: function () {
-      this._lclShow();
-      this._hideWithThrottle();
-    },
-    _hideWithThrottle: (function () {
-      let timeout = undefined;
-      return function () {
-        if (timeout) return;
-        timeout = setTimeout(() => {
-          this._lclHide();
-          timeout = undefined;
-        }, 500);
-      };
-    })(),
-  };
+    popoverNotification.element.addEventListener('click', (e) => {
+      popoverNotification.hideImmediately();
+    });
 
-  popoverNotification.element.addEventListener('click', (e) => {
-    popoverNotification.hideImmediately();
-  });
-
-  function notifySuccessfullSubmission() {
-    popoverNotification.activate();
-    alertNotification.activate();
-  }
+    return function () {
+      popoverNotification.activate();
+      alertNotification.activate();
+    };
+  })();
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (!form.checkValidity()) return;
 
     // form validation
-    validateOnSubmit();
-    if (!form.checkValidity()) {
-      document.getElementById('contact-me').scrollIntoView();
-      setTimeout(() => {
-        Array.from(formItems).forEach((formItem) => {
-          if (!formItem.input.validity.valid) {
-            formItem
-              .querySelector('.form-item__info')
-              .animate(
-                [
-                  { scale: 1 },
-                  { scale: 1.2, offset: 0.25 },
-                  { scale: 1, offset: 0.5 },
-                  { scale: 1.2, offset: 0.75 },
-                  { scale: 1 },
-                ],
-                500,
-              );
-          }
-        });
-      }, 1000);
-      return;
-    }
 
     // form submission
     const checkedServiceOfInterest = this.querySelector('[name="service-of-interest"]:checked');
 
-    const body = {
+    const body = {} ?? {
       name: nameFormItem.input.value,
       email: emailFormItem.input.value,
       tel: phoneFormItem.input.value,

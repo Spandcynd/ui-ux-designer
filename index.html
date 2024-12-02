@@ -636,9 +636,9 @@
           <span class="section-subtitle"
             >Cultivating Connections: Reach Out and Connect with Me</span
           >
-          <form action="#" method="post" novalidate>
-            <ul class="form-items">
-              <li class="form-item" id="form--name-item">
+          <form action="#" method="post">
+            <div class="form-items">
+              <div class="form-item" id="form--name-item">
                 <div class="form-item__wrapper">
                   <label for="form--name-input" class="form-item__label">Name</label>
                   <input
@@ -649,17 +649,9 @@
                     autocomplete="name"
                     required
                   />
-                  <div class="form-item__info tooltiped">
-                    !
-                    <div class="tooltip">
-                      <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </li>
-              <li class="form-item" id="form--email-item">
+              </div>
+              <div class="form-item" id="form--email-item">
                 <div class="form-item__wrapper">
                   <label for="form--email-input" class="form-item__label">Email</label>
                   <input
@@ -668,19 +660,12 @@
                     type="email"
                     name="email"
                     autocomplete="email"
+                    pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
                     required
                   />
-                  <div class="form-item__info tooltiped">
-                    !
-                    <div class="tooltip">
-                      <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </li>
-              <li class="form-item" id="form--tel-item">
+              </div>
+              <div class="form-item" id="form--tel-item">
                 <div class="form-item__wrapper">
                   <label for="form--tel-input" class="form-item__label">Phone number</label>
                   <input
@@ -692,67 +677,77 @@
                     autocomplete="tel"
                     required
                   />
-                  <div class="form-item__info tooltiped">
-                    !
-                    <div class="tooltip">
-                      <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </li>
-              <li class="form-item form-dropdown-item" id="form--service-of-interest-item">
+              </div>
+              <div class="form-item form-dropdown-item" id="form--service-of-interest-item">
                 <div class="form-dropdown-item__panel">
                   <button
                     class="form-dropdown-item__button"
+                    role="combobox"
+                    aria-haspopup="listbox"
                     aria-controls="dropdown"
                     aria-expanded="false"
                   >
                     ..Service of interest..
                   </button>
                   <div class="form-dropdown-item__arrow"></div>
-                  <div class="form-item__info tooltiped">
-                    !
-                    <div class="tooltip">
-                      <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
                 <div class="form-dropdown-item__body-outer-wrapper">
                   <div class="form-dropdown-item__body-inner-wrapper">
-                    <div id="dropdown" class="form-dropdown-item__body">
-                      <label class="form-dropdown-item__item">
-                        <span>..Service of interest..</span>
-                        <input type="radio" name="service-of-interest" value=""
-                      /></label>
-                      <label class="form-dropdown-item__item">
-                        <span>Webpage design</span>
-                        <input type="radio" name="service-of-interest" value="Webpage design"
-                      /></label>
-                      <label class="form-dropdown-item__item">
-                        <span>Fonts and icons collections</span>
+                    <div id="dropdown" class="form-dropdown-item__body" role="listbox">
+                      <option value="opt1">Opt1</option>
+                      <option value="opt2">Opt2</option>
+                      <option value="opt3">Opt3</option>
+                      <!-- <div class="form-dropdown-item__item">
+                        <label for="dropdown-default-option">..Service of interest..</label>
                         <input
+                          id="dropdown-default-option"
+                          type="radio"
+                          name="service-of-interest"
+                          value=""
+                        />
+                      </div>
+                      <div class="form-dropdown-item__item">
+                        <label for="dropdown-option1">Webpage design</label>
+                        <input
+                          id="dropdown-option1"
+                          type="radio"
+                          name="service-of-interest"
+                          value="Webpage design"
+                        />
+                      </div>
+                      <div class="form-dropdown-item__item">
+                        <label for="dropdown-option2">Fonts and icons collections</label>
+                        <input
+                          id="dropdown-option2"
                           type="radio"
                           name="service-of-interest"
                           value="Fonts and icons collections"
                         />
-                      </label>
-                      <label class="form-dropdown-item__item">
-                        <span>Logos and naming</span>
-                        <input type="radio" name="service-of-interest" value="Logos and naming" />
-                      </label>
-                      <label class="form-dropdown-item__item">
-                        <span>Other</span>
-                        <input type="radio" name="service-of-interest" value="Other" />
-                      </label>
+                      </div>
+                      <div class="form-dropdown-item__item">
+                        <label for="dropdown-option3">Logos and naming</label>
+                        <input
+                          id="dropdown-option3"
+                          type="radio"
+                          name="service-of-interest"
+                          value="Logos and naming"
+                        />
+                      </div>
+                      <div class="form-dropdown-item__item">
+                        <label for="dropdown-option4">Other</label>
+                        <input
+                          id="dropdown-option4"
+                          type="radio"
+                          name="service-of-interest"
+                          value="Other"
+                        />
+                      </div> -->
                     </div>
                   </div>
                 </div>
-              </li>
-              <li class="form-item" id="form--timeline-item">
+              </div>
+              <div class="form-item" id="form--timeline-item">
                 <div class="form-item__wrapper">
                   <label for="form--timeline-input" class="form-item__label">Timeline</label>
                   <input
@@ -761,17 +756,9 @@
                     type="text"
                     name="timeline"
                   />
-                  <div class="form-item__info tooltiped">
-                    !
-                    <div class="tooltip">
-                      <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </li>
-              <li class="form-item form-textarea-item" id="form--project-details-item">
+              </div>
+              <div class="form-item form-textarea-item" id="form--project-details-item">
                 <div class="form-item__wrapper">
                   <textarea
                     name="project-details"
@@ -779,17 +766,9 @@
                     minlength="10"
                     maxlength="250"
                   ></textarea>
-                  <div class="form-item__info tooltiped">
-                    !
-                    <div class="tooltip">
-                      <div class="tooltip__wrapper">
-                        <div class="tooltip__content"></div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </li>
-            </ul>
+              </div>
+            </div>
             <button class="buttonlink-secondary">Send</button>
             <div class="popover hidden" aria-hidden="true" id="form-popover">
               <div class="popover__content">
@@ -797,11 +776,6 @@
                 <span id="popover-title">Form successfully submited</span>
               </div>
             </div>
-            <!-- maybe it's better to create 2 different popovers:
-             first - only for visual notification. Has smooth animation and hidden from a11y tree 
-             second - only for screen readers. It has role="alert" and triggered via css display property change. 
-             Maybe it's better to move second popover to document's end. 
-             See YT - "Accessible Modal Dialogs -- A11ycasts #19" for some ideas-->
           </form>
         </section>
       </div>
