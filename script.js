@@ -3,7 +3,7 @@
   const dropdown = document.querySelector('.form-dropdown-item');
   const dropdownButton = document.querySelector('.form-dropdown-item__button');
   const dropdownArrow = document.querySelector('.form-dropdown-item__arrow');
-  const dropdownBody = document.querySelector('.form-dropdown-item__body');
+  const dropdownBody = document.getElementById('dropdown');
 
   function updateDropdownState() {
     if (dropdown.classList.contains('expanded')) {
@@ -13,39 +13,48 @@
     }
   }
 
-  function selectPreviousOption() {
-    const beforeChecked = dropdownBody.querySelector(
-        '.form-dropdown-item__item:has(+ .form-dropdown-item__item :checked)',
+  function getFocusedOption() {
+    return dropdownBody.querySelector('.form-dropdown-item__item.widget-focus');
+  }
+
+  function focusPreviousOption() {
+    const focused = getFocusedOption();
+    const beforeFocused = dropdownBody.querySelector(
+        '.form-dropdown-item__item:has(+ .form-dropdown-item__item.widget-focus)',
       ),
-      firstAndChecked = dropdownBody.querySelector(
-        '.form-dropdown-item__item:first-child:has(:checked)',
+      firstAndFocused = dropdownBody.querySelector(
+        '.form-dropdown-item__item.widget-focus:first-child',
       ),
       last = dropdownBody.querySelector('.form-dropdown-item__item:last-child');
 
-    const previous = beforeChecked ?? (firstAndChecked ? last : null);
+    const previous = beforeFocused ?? (firstAndFocused ? last : null);
 
     if (previous) {
-      previous.click();
+      previous.classList.add('widget-focus');
     } else {
-      last.click();
+      last.classList.add('widget-focus');
     }
+    focused.classList.remove('widget-focus');
   }
-  function selectNextOption() {
-    const afterChecked = dropdownBody.querySelector(
-        '.form-dropdown-item__item:has(:checked) + .form-dropdown-item__item',
+
+  function focusNextOption() {
+    const focused = getFocusedOption();
+    const afterFocused = dropdownBody.querySelector(
+        '.form-dropdown-item__item.widget-focus + .form-dropdown-item__item',
       ),
-      lastAndChecked = dropdownBody.querySelector(
-        '.form-dropdown-item__item:last-child:has(:checked)',
+      lastAndFocused = dropdownBody.querySelector(
+        '.form-dropdown-item__item.widget-focus:last-child',
       ),
       first = dropdownBody.querySelector('.form-dropdown-item__item:first-child');
 
-    const next = afterChecked ?? (lastAndChecked ? first : null);
+    const next = afterFocused ?? (lastAndFocused ? first : null);
 
     if (next) {
-      next.click();
+      next.classList.add('widget-focus');
     } else {
-      first.click();
+      first.classList.add('widget-focus');
     }
+    focused.classList.remove('widget-focus');
   }
 
   function toggleDropdown() {
@@ -60,19 +69,31 @@
   dropdownArrow.addEventListener('click', () => dropdownButton.click());
 
   dropdownButton.addEventListener('keydown', (e) => {
+    e.preventDefault();
     if (e.code === 'Tab') return;
+    if (e.code === 'Enter') {
+      dropdownButton.click();
+      return;
+    }
     if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
-      selectPreviousOption();
+      focusPreviousOption();
       return;
     }
     if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
-      selectNextOption();
+      focusNextOption();
       return;
+    }
+    if (e.code === 'Space') {
+      getFocusedOption().click();
     }
   });
 
-  dropdownBody.addEventListener('input', (e) => {
-    dropdownButton.textContent = e.target.previousElementSibling.textContent;
+  dropdownBody.addEventListener('click', (e) => {
+    const closestOption = e.target.closest('.form-dropdown-item__item');
+    if (closestOption) {
+      dropdownBody.querySelector('[aria-selected="true"]')?.setAttribute('aria-selected', 'false');
+      closestOption.setAttribute('aria-selected', 'true');
+    }
   });
 })();
 
