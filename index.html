@@ -640,7 +640,9 @@
             <div class="form-items">
               <div class="form-item" id="form--name-item">
                 <div class="form-item__wrapper">
-                  <label for="form--name-input" class="form-item__label">Name</label>
+                  <label for="form--name-input" class="form-item__label" title="Required field"
+                    >Name <span aria-label=". required">*</span></label
+                  >
                   <input
                     id="form--name-input"
                     class="form-item__input"
@@ -653,7 +655,9 @@
               </div>
               <div class="form-item" id="form--email-item">
                 <div class="form-item__wrapper">
-                  <label for="form--email-input" class="form-item__label">Email</label>
+                  <label for="form--email-input" class="form-item__label" title="Required field"
+                    >Email <span aria-label=". required">*</span></label
+                  >
                   <input
                     id="form--email-input"
                     class="form-item__input"
@@ -667,7 +671,9 @@
               </div>
               <div class="form-item" id="form--tel-item">
                 <div class="form-item__wrapper">
-                  <label for="form--tel-input" class="form-item__label">Phone number</label>
+                  <label for="form--tel-input" class="form-item__label" title="Required field"
+                    >Phone number <span aria-label=". required">*</span></label
+                  >
                   <input
                     id="form--tel-input"
                     class="form-item__input"
@@ -681,31 +687,38 @@
               </div>
               <div class="form-item form-dropdown-item" id="form--service-of-interest-item">
                 <div class="form-dropdown-item__panel">
-                  <button
-                    class="form-dropdown-item__button"
+                  <div class="sr-only" id="service-of-interest-label">Service of interest</div>
+                  <input
+                    id="form--service-of-interes-input"
+                    type="text"
+                    value="Service of interest"
+                    readonly
+                    aria-labelledby="service-of-interest-label"
+                    class="form-dropdown-item__input"
                     role="combobox"
                     aria-haspopup="listbox"
                     aria-controls="dropdown"
                     aria-expanded="false"
-                  >
-                    ..Service of interest..
-                  </button>
+                    aria-activedescendant
+                  />
                   <div class="form-dropdown-item__arrow"></div>
                 </div>
                 <div class="form-dropdown-item__body-outer-wrapper">
                   <div class="form-dropdown-item__body-inner-wrapper">
                     <div id="dropdown" class="form-dropdown-item__body" role="listbox">
                       <option
-                        class="form-dropdown-item__item widget-focus"
-                        value=""
+                        class="form-dropdown-item__item"
+                        value="Service of interest"
                         aria-selected="true"
+                        id="option1-1"
                       >
-                        ..Service of interest..
+                        ..Choose service of interest..
                       </option>
                       <option
                         class="form-dropdown-item__item"
                         value="Webpage design"
                         aria-selected="false"
+                        id="option1-2"
                       >
                         Webpage design
                       </option>
@@ -713,6 +726,7 @@
                         class="form-dropdown-item__item"
                         value="Fonts and icons collections"
                         aria-selected="false"
+                        id="option1-3"
                       >
                         Fonts and icons collections
                       </option>

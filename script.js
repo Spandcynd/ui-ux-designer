@@ -1,90 +1,181 @@
 // dropdown in contact-me section form
 (function () {
   const dropdown = document.querySelector('.form-dropdown-item');
-  const dropdownButton = document.querySelector('.form-dropdown-item__button');
+  const dropdownInput = document.querySelector('.form-dropdown-item__input');
   const dropdownArrow = document.querySelector('.form-dropdown-item__arrow');
   const dropdownBody = document.getElementById('dropdown');
 
-  function updateDropdownState() {
-    if (dropdown.classList.contains('expanded')) {
-      dropdownButton.setAttribute('aria-expanded', 'true');
-    } else {
-      dropdownButton.setAttribute('aria-expanded', 'false');
-    }
-  }
+  const options = dropdownBody.querySelectorAll('option');
 
-  function getFocusedOption() {
-    return dropdownBody.querySelector('.form-dropdown-item__item.widget-focus');
+  function setVisualFocus(descendant) {
+    descendant.classList.add('active-descendant');
+  }
+  function removeVisualFocus(descendant) {
+    descendant.classList.remove('active-descendant');
+  }
+  function getFocusedOptionIndex() {
+    const focusedADid = dropdownInput.getAttribute('aria-activedescendant');
+    if (focusedADid === '') return -1;
+    return focusedADid.charAt(focusedADid.length - 1) - 1;
+  }
+  function focusOptionByIndex(index) {
+    clearOptionFocus();
+    dropdownInput.setAttribute('aria-activedescendant', 'option1-' + (index + 1));
+    setVisualFocus(geOptionByIndex(index));
+  }
+  function clearOptionFocus() {
+    const focusedOptionIndex = getFocusedOptionIndex();
+    if (focusedOptionIndex === -1) return;
+    dropdownInput.setAttribute('aria-activedescendant', '');
+    removeVisualFocus(geOptionByIndex(focusedOptionIndex));
   }
 
   function focusPreviousOption() {
-    const focused = getFocusedOption();
-    const beforeFocused = dropdownBody.querySelector(
-        '.form-dropdown-item__item:has(+ .form-dropdown-item__item.widget-focus)',
-      ),
-      firstAndFocused = dropdownBody.querySelector(
-        '.form-dropdown-item__item.widget-focus:first-child',
-      ),
-      last = dropdownBody.querySelector('.form-dropdown-item__item:last-child');
-
-    const previous = beforeFocused ?? (firstAndFocused ? last : null);
-
-    if (previous) {
-      previous.classList.add('widget-focus');
-    } else {
-      last.classList.add('widget-focus');
+    const ADindex = getFocusedOptionIndex();
+    if (ADindex === 0) {
+      return;
     }
-    focused.classList.remove('widget-focus');
+    const resultIndex = ADindex - 1;
+    focusOptionByIndex(resultIndex);
   }
-
   function focusNextOption() {
-    const focused = getFocusedOption();
-    const afterFocused = dropdownBody.querySelector(
-        '.form-dropdown-item__item.widget-focus + .form-dropdown-item__item',
-      ),
-      lastAndFocused = dropdownBody.querySelector(
-        '.form-dropdown-item__item.widget-focus:last-child',
-      ),
-      first = dropdownBody.querySelector('.form-dropdown-item__item:first-child');
+    const ADindex = getFocusedOptionIndex();
+    if (ADindex === options.length - 1) {
+      return;
+    }
+    const resultIndex = ADindex + 1;
+    focusOptionByIndex(resultIndex);
+  }
 
-    const next = afterFocused ?? (lastAndFocused ? first : null);
+  dropdownArrow.addEventListener('click', () => dropdownInput.click());
 
-    if (next) {
-      next.classList.add('widget-focus');
+  function geOptionByIndex(index) {
+    return document.getElementById('option1-' + (index + 1));
+  }
+  function getFocusedOption() {
+    return document.getElementById(dropdownInput.getAttribute('aria-activedescendant'));
+  }
+
+  function isDropdownExpanded() {
+    return dropdownInput.getAttribute('aria-expanded') === 'true';
+  }
+
+  // variable that holds value of aria-activedescendant
+  let indexOfOptionToFocus = 0;
+
+  // Interaction functions
+  function openDropdown() {
+    dropdown.classList.add('expanded');
+    dropdownInput.setAttribute('aria-expanded', 'true');
+    focusOptionByIndex(indexOfOptionToFocus);
+  }
+  function openAndFocusFirstOption() {
+    indexOfOptionToFocus = 0;
+    openDropdown();
+  }
+  function openAndFocusLastOption() {
+    indexOfOptionToFocus = options.length - 1;
+    openDropdown();
+  }
+
+  function focusFirstOption() {
+    focusOptionByIndex(0);
+  }
+  function focusLastOption() {
+    focusOptionByIndex(options.length - 1);
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove('expanded');
+    dropdownInput.setAttribute('aria-expanded', 'false');
+    const focusedOptionIndex = getFocusedOptionIndex();
+    indexOfOptionToFocus = focusedOptionIndex === -1 ? 0 : focusedOptionIndex;
+    clearOptionFocus();
+  }
+  function selectFocusedOptionAndClose() {
+    getFocusedOption()?.click();
+    closeDropdown();
+  }
+  function closeAndFocusToPreviousFormItem() {
+    closeDropdown();
+    document.getElementById('form--tel-input').focus();
+  }
+  function closeAndSelectAndFocusToNextFormItem() {
+    selectFocusedOptionAndClose();
+    document.getElementById('form--timeline-input').focus();
+  }
+
+  dropdownInput.addEventListener('click', (e) => {
+    const isExpanded = isDropdownExpanded();
+    if (isExpanded) {
+      closeDropdown();
     } else {
-      first.classList.add('widget-focus');
+      openDropdown();
     }
-    focused.classList.remove('widget-focus');
-  }
-
-  function toggleDropdown() {
-    dropdown.classList.toggle('expanded');
-    updateDropdownState();
-  }
-
-  dropdownButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    toggleDropdown();
   });
-  dropdownArrow.addEventListener('click', () => dropdownButton.click());
 
-  dropdownButton.addEventListener('keydown', (e) => {
+  dropdownBody.addEventListener('mouseenter', () => {
+    clearOptionFocus();
+  });
+
+  dropdownInput.addEventListener('keydown', (e) => {
     e.preventDefault();
-    if (e.code === 'Tab') return;
-    if (e.code === 'Enter') {
-      dropdownButton.click();
+    // console.log(e);
+
+    const isExpanded = isDropdownExpanded();
+    if (e.code === 'Tab') {
+      if (e.shiftKey) {
+        closeAndFocusToPreviousFormItem();
+      } else {
+        closeAndSelectAndFocusToNextFormItem();
+      }
       return;
     }
-    if (e.code === 'ArrowUp' || e.code === 'ArrowLeft') {
-      focusPreviousOption();
+    if (e.code === 'Enter' || e.code === 'Space') {
+      if (isExpanded) {
+        selectFocusedOptionAndClose();
+      } else {
+        openDropdown();
+      }
       return;
     }
-    if (e.code === 'ArrowDown' || e.code === 'ArrowRight') {
-      focusNextOption();
+    if (e.code === 'Escape' && isExpanded) {
+      closeDropdown();
       return;
     }
-    if (e.code === 'Space') {
-      getFocusedOption().click();
+
+    if (e.code === 'ArrowDown') {
+      if (isExpanded) {
+        focusNextOption();
+      } else {
+        openDropdown();
+      }
+      return;
+    }
+    if (e.code === 'ArrowUp') {
+      if (!isExpanded) {
+        openAndFocusFirstOption();
+      } else {
+        focusPreviousOption();
+      }
+      return;
+    }
+
+    if (e.code === 'Home') {
+      if (!isExpanded) {
+        openAndFocusFirstOption();
+      } else {
+        focusFirstOption();
+      }
+      return;
+    }
+    if (e.code === 'End') {
+      if (!isExpanded) {
+        openAndFocusLastOption();
+      } else {
+        focusLastOption();
+      }
+      return;
     }
   });
 
@@ -93,6 +184,7 @@
     if (closestOption) {
       dropdownBody.querySelector('[aria-selected="true"]')?.setAttribute('aria-selected', 'false');
       closestOption.setAttribute('aria-selected', 'true');
+      dropdownInput.value = closestOption.value;
     }
   });
 })();

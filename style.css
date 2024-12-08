@@ -874,20 +874,17 @@ form {
   transform: rotate(45deg) translateX(-0.3em);
 }
 
-.form-dropdown-item__button {
+.form-dropdown-item__input {
+  color: inherit;
+  font: inherit;
   border: none;
   padding: 0;
   background: transparent;
   flex: 1;
-  text-align: start;
+  cursor: default;
+  user-select: none;
 }
 
-.form-dropdown-item__panel:has(
-    ~ .form-dropdown-item__body-outer-wrapper .form-dropdown-item__item:not(:first-child) :checked
-  )
-  .form-dropdown-item__button {
-  color: white;
-}
 .form-dropdown-item__body-outer-wrapper {
   display: flex;
 }
@@ -913,7 +910,7 @@ form {
   opacity: 0;
 }
 .form-dropdown-item__item:hover::before,
-.form-dropdown-item__body:not(:hover) .form-dropdown-item__item.widget-focus::before {
+.form-dropdown-item__body:not(:hover) .form-dropdown-item__item.active-descendant::before {
   opacity: 1;
 }
 .form-dropdown-item__item[aria-selected='true'] {
