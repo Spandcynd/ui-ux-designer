@@ -375,21 +375,7 @@ section {
   color: var(--color-accent-0d);
 }
 
-.sr-alert.hidden {
-  display: none;
-}
-
 img[alt] {
   color: var(--color-main-0d);
   font-size: 1.5rem;
-}
-
-.ffi-errors {
-  color: rgb(163, 0, 0);
-}
-.ffi-warnings {
-  color: orange;
-}
-.ffi-infos {
-  color: rgb(74, 152, 255);
 }

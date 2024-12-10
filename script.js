@@ -193,13 +193,13 @@
 (function () {
   const form = document.querySelector('form');
 
-  const formItems = document.getElementsByClassName('form-item');
-  const nameFormItem = document.getElementById('form--name-item');
-  const emailFormItem = document.getElementById('form--email-item');
-  const phoneFormItem = document.getElementById('form--tel-item');
-  const serviceOfInterestFormItem = document.getElementById('form--service-of-interest-item');
-  const timelineFormItem = document.getElementById('form--timeline-item');
-  const projectDetailsFormItem = document.getElementById('form--project-details-item');
+  const formItems = document.querySelector('.form-items');
+  const nameInput = document.getElementById('form--name-input');
+  const emailInput = document.getElementById('form--email-input');
+  const phoneInput = document.getElementById('form--tel-input');
+  const serviceOfInterestInput = document.getElementById('form--service-of-interest-input');
+  const timelineInput = document.getElementById('form--timeline-input');
+  const projectDetailsInput = document.getElementById('form--project-details-input');
 
   //setup popover for successfull form submission
 
@@ -240,33 +240,13 @@
       })(),
     };
 
-    const alertNotification = {
-      element: document.getElementById('form-submission-alert'),
-      state: 'hidden',
-      _lclShow: function () {
-        if (this.state === 'visible') return;
-        this.element.classList.remove('hidden');
-        this.state = 'visible';
-      },
-      _lclHide: function () {
-        if (this.state === 'hidden') return;
-        this.element.classList.add('hidden');
-        this.state = 'hidden';
-      },
+    const screenReaderNotification = {
+      element: document.getElementById('form-submission-notification'),
+      notificationText: 'Form successfully submited',
       activate: function () {
-        this._lclShow();
-        this._hideWithThrottle();
+        this.element.innerHTML = '';
+        this.element.textContent = this.notificationText;
       },
-      _hideWithThrottle: (function () {
-        let timeout = undefined;
-        return function () {
-          if (timeout) return;
-          timeout = setTimeout(() => {
-            this._lclHide();
-            timeout = undefined;
-          }, 500);
-        };
-      })(),
     };
 
     popoverNotification.element.addEventListener('click', (e) => {
@@ -275,26 +255,154 @@
 
     return function () {
       popoverNotification.activate();
-      alertNotification.activate();
+      screenReaderNotification.activate();
     };
   })();
 
+  function isInputValidatable(input) {
+    return input.classList.contains('_has-validation');
+  }
+  function isInputTouched(input) {
+    return input.classList.contains('_touched');
+  }
+  function touchInput(input) {
+    input.classList.add('_touched');
+  }
+  function updateValidityClass(input) {
+    const valid = input.checkValidity();
+    input.classList.toggle('invalid', !valid);
+  }
+
+  function validateEmail(input) {
+    const validityObj = input.validity;
+    if (validityObj.valid) {
+      return '';
+    }
+    if (validityObj.patternMismatch) {
+      return 'Validation error: wrong email format';
+    }
+    if (validityObj.valueMissing) {
+      return 'Validation error: required field';
+    }
+
+    return 'Validation error: invalid email';
+  }
+  function validatePhoneNumber(input) {
+    const validityObj = input.validity;
+    if (validityObj.valid) {
+      return '';
+    }
+    if (validityObj.patternMismatch) {
+      return 'Validation error: wrong phone number format';
+    }
+    if (validityObj.valueMissing) {
+      return 'Validation error: required field';
+    }
+
+    return 'Validation error: invalid phone number';
+  }
+  function validateText(input) {
+    const validityObj = input.validity;
+    if (validityObj.valid) {
+      return '';
+    }
+    if (validityObj.patternMismatch) {
+      return 'Validation error: wrong text format';
+    }
+    if (validityObj.valueMissing) {
+      return 'Validation error: required field';
+    }
+
+    return 'Validation error: invalid input';
+  }
+  function validate(input) {
+    let message;
+    switch (input.type) {
+      case 'email':
+        message = validateEmail(input);
+        break;
+
+      case 'tel':
+        message = validatePhoneNumber(input);
+        break;
+
+      case 'text':
+        message = validateText(input);
+        break;
+
+      default:
+        console.error('Trying to validate input of unknown type');
+    }
+    return message;
+  }
+
+  function validateInput(input) {
+    updateValidityClass(input);
+    const validityMessage = validate(input);
+    input.title = validityMessage;
+    // Only set notification message. Notification announcment is done when invalid input receives focus
+    input.notificationMessage = validityMessage;
+  }
+
+  function isInputValid(input) {
+    return !input.classList.contains('invalid');
+  }
+
+  formItems.addEventListener('focusout', (e) => {
+    const input = e.target;
+    if (!isInputValidatable(input)) return;
+    touchInput(input);
+    validateInput(input);
+  });
+
+  let timeout;
+  formItems.addEventListener('input', (e) => {
+    const input = e.target;
+    if (!isInputTouched(input)) return;
+    validateInput(input);
+
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      validationNotification.innerHTML = '';
+      validationNotification.textContent = input.notificationMessage;
+    }, 2000);
+  });
+
+  const validationNotification = document.getElementById('form-validation-notification');
+  formItems.addEventListener('focusin', (e) => {
+    const input = e.target;
+    if (!isInputValidatable(input) || isInputValid(input)) return;
+
+    validationNotification.innerHTML = '';
+    validationNotification.textContent = input.notificationMessage;
+  });
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (!form.checkValidity()) return;
-
     // form validation
 
-    // form submission
-    const checkedServiceOfInterest = this.querySelector('[name="service-of-interest"]:checked');
+    const validatableInputs = document.querySelectorAll('._has-validation');
 
-    const body = {} ?? {
-      name: nameFormItem.input.value,
-      email: emailFormItem.input.value,
-      tel: phoneFormItem.input.value,
-      'service-of-interest': checkedServiceOfInterest?.value ?? '',
-      timeline: timelineFormItem.input.value,
-      'project-details': projectDetailsFormItem.input.value,
+    if (!form.checkValidity()) {
+      validatableInputs.forEach((input) => {
+        touchInput(input);
+        validateInput(input);
+      });
+      document.getElementById('contact-me').scrollIntoView();
+      setTimeout(() => {
+        form.querySelector('.invalid').focus();
+      }, 500);
+      return;
+    }
+
+    // form submission
+    const body = {
+      name: nameInput.value,
+      email: emailInput.value,
+      tel: phoneInput.value,
+      'service-of-interest': serviceOfInterestInput.value,
+      timeline: timelineInput.value,
+      'project-details': projectDetailsInput.value,
     };
 
     fetch(this.getAttribute('action'), {
@@ -425,7 +533,8 @@
   const tooltipText = { initial: 'copy', replaced: 'copied!' };
   // Visual end
   // SR
-  const copiedAlert = document.getElementById('copied-alert');
+  const copiedNotification = document.getElementById('copied-notification');
+  const notificationText = 'copied successfully!';
   // SR end
   copies.forEach((copy) => {
     const target = document.getElementById(copy.dataset.copyTarget);
@@ -449,10 +558,8 @@
       // Visual end
 
       // SR
-      copiedAlert.classList.add('hidden');
-      setTimeout(() => {
-        copiedAlert.classList.remove('hidden');
-      }, 50);
+      copiedNotification.innerHTML = '';
+      copiedNotification.textContent = notificationText;
       // SR end
     };
     copy.addEventListener('keypress', (e) => {

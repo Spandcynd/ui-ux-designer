@@ -821,7 +821,7 @@ form {
   align-items: center;
 }
 .form-item__label {
-  margin-right: 1em;
+  padding-right: 1em;
   min-width: max-content;
 }
 .form-item__input {
@@ -838,7 +838,6 @@ form {
   -webkit-text-fill-color: var(--color-main-1d);
   -webkit-box-shadow: 0 0 0px 40rem var(--color-background-1d) inset;
 }
-
 .form-dropdown-item__panel {
   position: relative;
   display: flex;
@@ -883,6 +882,10 @@ form {
   flex: 1;
   cursor: default;
   user-select: none;
+}
+
+.form-dropdown-item:has([aria-selected='true']:not(:first-child)) .form-dropdown-item__input {
+  color: white;
 }
 
 .form-dropdown-item__body-outer-wrapper {
@@ -959,10 +962,6 @@ form .buttonlink-secondary {
   }
   transition: color 0.2s, border-color 0.2s;
 }
-form:has(:user-invalid) .buttonlink-secondary:is(:hover, :focus-visible) {
-  color: red;
-  border-color: red;
-}
 
 @media (max-width: 640px) {
   form {
@@ -975,6 +974,17 @@ form:has(:user-invalid) .buttonlink-secondary:is(:hover, :focus-visible) {
     align-items: stretch;
     gap: 1em;
   }
+}
+
+/* Form validation UI */
+
+.form-item:has(.invalid) {
+  outline: 2px solid darkred;
+}
+
+form:has(.invalid) .buttonlink-secondary:is(:hover, :focus-visible) {
+  color: red;
+  border-color: red;
 }
 
 /* Footer ============================================================================================ */
