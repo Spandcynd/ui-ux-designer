@@ -1,11 +1,17 @@
 // dropdown in contact-me section form
 (function () {
   const dropdown = document.querySelector('.form-dropdown-item');
+  const dropdownPanel = document.querySelector('.form-dropdown-item__panel');
   const dropdownInput = document.querySelector('.form-dropdown-item__input');
-  const dropdownArrow = document.querySelector('.form-dropdown-item__arrow');
   const dropdownBody = document.getElementById('dropdown');
 
   const options = dropdownBody.querySelectorAll('option');
+
+  dropdownPanel.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.closest('.form-dropdown-item__input')) return;
+    dropdownInput.click();
+  });
 
   function setVisualFocus(descendant) {
     descendant.classList.add('active-descendant');
@@ -46,8 +52,6 @@
     const resultIndex = ADindex + 1;
     focusOptionByIndex(resultIndex);
   }
-
-  dropdownArrow.addEventListener('click', () => dropdownInput.click());
 
   function geOptionByIndex(index) {
     return document.getElementById('option1-' + (index + 1));
@@ -191,17 +195,19 @@
 
 // form handling
 (function () {
-  const form = document.querySelector('form');
+  // Delegate clicks for bigger touch area
 
   const formItems = document.querySelector('.form-items');
-  const nameInput = document.getElementById('form--name-input');
-  const emailInput = document.getElementById('form--email-input');
-  const phoneInput = document.getElementById('form--tel-input');
-  const serviceOfInterestInput = document.getElementById('form--service-of-interest-input');
-  const timelineInput = document.getElementById('form--timeline-input');
-  const projectDetailsInput = document.getElementById('form--project-details-input');
 
-  //setup popover for successfull form submission
+  formItems.addEventListener('click', (e) => {
+    const target = e.target;
+
+    if (target.classList.contains('form-item__wrapper')) {
+      target.querySelector('.form-item__input').focus();
+    }
+  });
+
+  // Setup popover for successfull form submission
 
   const notifySuccessfullSubmission = (function () {
     const popoverNotification = {
@@ -258,6 +264,17 @@
       screenReaderNotification.activate();
     };
   })();
+
+  // Form validation
+
+  const form = document.querySelector('form');
+
+  const nameInput = document.getElementById('form--name-input');
+  const emailInput = document.getElementById('form--email-input');
+  const phoneInput = document.getElementById('form--tel-input');
+  const serviceOfInterestInput = document.getElementById('form--service-of-interest-input');
+  const timelineInput = document.getElementById('form--timeline-input');
+  const projectDetailsInput = document.getElementById('form--project-details-input');
 
   function isInputValidatable(input) {
     return input.classList.contains('_has-validation');
@@ -351,7 +368,7 @@
   formItems.addEventListener('focusout', (e) => {
     const input = e.target;
     if (!isInputValidatable(input)) return;
-    touchInput(input);
+    if (!isInputTouched(input)) touchInput(input);
     validateInput(input);
   });
 
