@@ -42,21 +42,35 @@ header.sticky .container {
 .main-nav-burger {
   display: none;
 }
+
 .main-nav-burger__controller {
-  padding: 0.25em;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.37em;
+  line-height: 1;
+  padding: 0.5em;
+  background: none;
+  border: none;
+  --color: var(--color-main-2d);
+}
+.main-nav-burger__controller:is(:hover, :focus) {
+  --color: var(--color-main-1d);
+}
+.main-nav-burger__controller-text {
+  color: var(--color);
+  transition: color 0.2s;
 }
 
-[class^='main-nav-burger__line'] {
+.main-nav-burger__line1,
+.main-nav-burger__line2,
+.main-nav-burger__line3 {
   height: 0.125em;
   margin-bottom: 0.25em;
   border-radius: 1em;
-  background-color: var(--color-main-2d);
+  background-color: var(--color);
   transition: background-color 0.2s;
 }
-.main-nav-burger__controller:hover [class^='main-nav-burger__line'] {
-  background-color: var(--color-main-1d);
-}
+
 .main-nav-burger__line1 {
   aspect-ratio: 9;
 }
@@ -75,15 +89,13 @@ header.sticky .container {
   background: #121212;
   display: grid;
   grid-template-rows: 0fr;
-  /* transition: grid-template-rows 0.2s; */
   position: absolute;
   z-index: 10;
-  top: 1em;
+  top: 0.37em;
   left: 0;
-  /* min-width: max-content; */
   border-bottom: 1px solid var(--color-accent-0d);
   width: 0px;
-  box-shadow: 0 0 10px black;
+  box-shadow: 0 5px 10px black;
 
   --duration: 0.2s;
   --delay: 0.3s;
@@ -91,7 +103,7 @@ header.sticky .container {
   transition-duration: var(--duration), var(--duration);
   transition-delay: var(--delay), 0s;
 }
-.main-nav-burger__main-nav.active {
+.main-nav-burger__main-nav.expanded {
   transition-delay: 0s, var(--delay);
   width: 130px;
   grid-template-rows: 1fr;
@@ -188,6 +200,12 @@ main {
   filter: blur(80px);
 }
 
+.hero__intro-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .hero .subtext {
   color: var(--color-main-3d);
   font-size: 1.5rem;
@@ -282,6 +300,9 @@ main {
   .hero__first-block {
     align-items: center;
     margin-top: 0;
+  }
+  .hero__intro-text {
+    align-items: center;
   }
   .hero__second-block {
     width: 100%;

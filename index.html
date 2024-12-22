@@ -31,21 +31,82 @@
       <div class="container">
         <a href="#main" class="sr-only_not-focus">Skip to main content</a>
         <div class="main-nav-burger">
-          <div class="main-nav-burger__controller">
-            <div class="main-nav-burger__line1"></div>
-            <div class="main-nav-burger__line2"></div>
-            <div class="main-nav-burger__line3"></div>
-          </div>
+          <button
+            id="burger-menubutton"
+            class="main-nav-burger__controller"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            aria-controls="burger-items"
+          >
+            <div class="main-nav-burger__lines" aria-hidden="true">
+              <div class="main-nav-burger__line1"></div>
+              <div class="main-nav-burger__line2"></div>
+              <div class="main-nav-burger__line3"></div>
+            </div>
+            <p class="main-nav-burger__controller-text">Menu</p>
+          </button>
           <div class="position-relative">
             <nav class="main-nav-burger__main-nav">
-              <ul class="main-nav-burger__main-nav-items">
-                <li><a class="main-nav-burger__main-nav-item" href="#hero">Home</a></li>
-                <li><a class="main-nav-burger__main-nav-item" href="#services">Services</a></li>
-                <li><a class="main-nav-burger__main-nav-item" href="#about-me">About me</a></li>
-                <li><a class="main-nav-burger__main-nav-item" href="#portfolio">Portfolio</a></li>
-                <li><a class="main-nav-burger__main-nav-item" href="#contact-me">Contact me</a></li>
-                <li>
-                  <a class="main-nav-burger__main-nav-item hire-me" href="#contact-me">Hire me</a>
+              <ul
+                class="main-nav-burger__main-nav-items"
+                aria-labelledby="burger-menubutton"
+                id="burger-items"
+                role="menu"
+                aria-hidden="true"
+              >
+                <li role="none">
+                  <a
+                    tabindex="-1"
+                    role="menuitem"
+                    class="main-nav-burger__main-nav-item"
+                    href="#hero"
+                    >Home</a
+                  >
+                </li>
+                <li role="none">
+                  <a
+                    tabindex="-1"
+                    role="menuitem"
+                    class="main-nav-burger__main-nav-item"
+                    href="#services"
+                    >Services</a
+                  >
+                </li>
+                <li role="none">
+                  <a
+                    tabindex="-1"
+                    role="menuitem"
+                    class="main-nav-burger__main-nav-item"
+                    href="#about-me"
+                    >About me</a
+                  >
+                </li>
+                <li role="none">
+                  <a
+                    tabindex="-1"
+                    role="menuitem"
+                    class="main-nav-burger__main-nav-item"
+                    href="#portfolio"
+                    >Portfolio</a
+                  >
+                </li>
+                <li role="none">
+                  <a
+                    tabindex="-1"
+                    role="menuitem"
+                    class="main-nav-burger__main-nav-item"
+                    href="#contact-me"
+                    >Contact me</a
+                  >
+                </li>
+                <li role="none">
+                  <a
+                    tabindex="-1"
+                    role="menuitem"
+                    class="main-nav-burger__main-nav-item hire-me"
+                    href="#contact-me"
+                    >Hire me</a
+                  >
                 </li>
               </ul>
             </nav>
@@ -66,11 +127,13 @@
     </header>
     <main id="main">
       <div class="container">
-        <section class="hero" id="hero">
+        <section class="hero">
           <div class="hero__wrapper">
             <div class="hero__first-block">
-              <span class="subtext">Hi I am</span>
-              <span class="designer-name">Mahmood Fazile</span>
+              <p class="hero__intro-text" id="hero" tabindex="-1">
+                <span class="subtext">Hi<span class="sr-only">,</span> I am</span>
+                <span class="designer-name">Mahmood Fazile</span>
+              </p>
               <h1>UI/UX Designer</h1>
               <div class="socials">
                 <a href="#">
@@ -193,8 +256,8 @@
             </div>
           </div>
         </section>
-        <section class="services" id="services">
-          <h2 class="section-title">Services</h2>
+        <section class="services">
+          <h2 class="section-title" id="services" tabindex="-1">Services</h2>
           <span class="section-subtitle"
             >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas exercitationem nam
             cum.</span
@@ -327,8 +390,8 @@
             </div>
           </div>
         </section>
-        <section class="about-me" id="about-me">
-          <h2 class="section-title">About Me</h2>
+        <section class="about-me">
+          <h2 class="section-title" id="about-me" tabindex="-1">About Me</h2>
           <span class="section-subtitle"
             >User Interface and User Experience and Also video editing</span
           >
@@ -357,6 +420,7 @@
               </p>
               <a href="#" class="about-me__link buttonlink-primary">
                 <svg
+                  role="none"
                   width="21"
                   height="20"
                   viewBox="0 0 21 20"
@@ -392,7 +456,7 @@
           <div class="about-me__skills">
             <div class="skill">
               <div class="skill__svg-container">
-                <svg>
+                <svg role="none">
                   <circle cx="50%" cy="50%" r="45%" class="back" fill="none" />
                   <circle cx="50%" cy="50%" r="45%" class="front" fill="none" />
                 </svg>
@@ -529,8 +593,8 @@
             </div>
           </div>
         </section>
-        <section class="portfolio" id="portfolio">
-          <h2 class="section-title">Portfolio</h2>
+        <section class="portfolio">
+          <h2 class="section-title" id="portfolio" tabindex="-1">Portfolio</h2>
           <fieldset class="category-filter">
             <legend class="sr-only">Select one of categories</legend>
             <div class="categories-container">
@@ -631,8 +695,8 @@
             </div>
           </div>
         </section>
-        <section class="contact-me" id="contact-me">
-          <h2 class="section-title">Contact Me</h2>
+        <section class="contact-me">
+          <h2 class="section-title" id="contact-me" tabindex="-1">Contact Me</h2>
           <span class="section-subtitle"
             >Cultivating Connections: Reach Out and Connect with Me</span
           >

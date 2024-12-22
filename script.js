@@ -436,9 +436,141 @@
 (function () {
   const burgerController = document.querySelector('.main-nav-burger__controller');
   const mainNav = document.querySelector('.main-nav-burger__main-nav');
+  const mainNavItemsContainer = document.querySelector('.main-nav-burger__main-nav-items');
+  const mainNavItems = Array.from(document.querySelectorAll('.main-nav-burger__main-nav-item'));
+
+  let itemsLength;
+  const windowBreakpoint = window.matchMedia('(max-width: 640px)');
+  function handleChangeEvent() {
+    if (windowBreakpoint.matches) {
+      itemsLength = mainNavItemsContainer.length;
+    } else {
+      itemsLength = mainNavItemsContainer.length - 1;
+    }
+  }
+  windowBreakpoint.addEventListener('change', handleChangeEvent);
+  handleChangeEvent();
+
+  function openPopup() {
+    if (mainNav.classList.contains('expanded')) return;
+    mainNav.classList.add('expanded');
+    burgerController.setAttribute('aria-expanded', 'true');
+    mainNavItemsContainer.setAttribute('aria-hidden', 'false');
+  }
+  function closePopup() {
+    if (!mainNav.classList.contains('expanded')) return;
+    mainNav.classList.remove('expanded');
+    burgerController.setAttribute('aria-expanded', 'false');
+    mainNavItemsContainer.setAttribute('aria-hidden', 'true');
+  }
+  function isPopupOpened() {
+    return mainNav.classList.contains('expanded');
+  }
+
+  function getFirstItemIndex() {
+    return 0;
+  }
+  function getLastItemIndex() {
+    return itemsLength - 1;
+  }
+  function getPreviousItemIndex(pivotIndex) {
+    const startIndex = getFirstItemIndex();
+    const endIndex = getLastItemIndex();
+    if (pivotIndex === startIndex) return endIndex;
+    return pivotIndex - 1;
+  }
+  function getNextItemIndex(pivotIndex) {
+    const startIndex = getFirstItemIndex();
+    const endIndex = getLastItemIndex();
+    if (pivotIndex === endIndex) return startIndex;
+    return pivotIndex + 1;
+  }
+  function getFocusedItemIndex() {
+    return mainNavItems.indexOf(document.activeElement);
+  }
+
+  function getItemByIndex(index) {
+    if (index === -1) {
+      console.error('Trying to get unexisted item');
+      return;
+    }
+    return mainNavItems[index];
+  }
+
+  function focusItem(item) {
+    item?.focus();
+  }
+  function focusController() {
+    burgerController.focus();
+  }
 
   burgerController.addEventListener('click', (e) => {
-    mainNav.classList.toggle('active');
+    if (isPopupOpened()) {
+      closePopup();
+    } else {
+      openPopup();
+    }
+  });
+
+  burgerController.addEventListener('keydown', (e) => {
+    if (e.target !== e.currentTarget) return;
+    let customBehaviorTriggered = false;
+
+    switch (e.code) {
+      case 'Enter':
+      case 'Space':
+      case 'ArrowDown':
+        openPopup();
+        focusItem(getItemByIndex(getFirstItemIndex()));
+
+        customBehaviorTriggered = true;
+        break;
+
+      case 'Escape':
+        closePopup();
+        customBehaviorTriggered = true;
+        break;
+    }
+
+    if (customBehaviorTriggered) e.preventDefault();
+  });
+
+  mainNavItemsContainer.addEventListener('keydown', (e) => {
+    // Possible semantic error/incompletness on next line of code: doesn't consider if
+    // target item in allowed index range. It should operate with mechanism, which represents current
+    // reachable items (now this role takes itemLength variable).
+    // Though, current implementation considers that unreachable item is not displayed at all, so it
+    // can't even get focus and, consequently, be a target of keydown events.
+    if (!mainNavItems.includes(e.target)) return;
+
+    let customBehaviorTriggered = false;
+
+    switch (e.code) {
+      case 'Space':
+      case 'Enter':
+        getItemByIndex(getFocusedItemIndex()).click();
+        closePopup();
+        customBehaviorTriggered = true;
+        break;
+
+      case 'ArrowDown':
+        focusItem(getItemByIndex(getNextItemIndex(getFocusedItemIndex())));
+        customBehaviorTriggered = true;
+        break;
+
+      case 'ArrowUp':
+        focusItem(getItemByIndex(getPreviousItemIndex(getFocusedItemIndex())));
+        customBehaviorTriggered = true;
+        break;
+
+      case 'Escape':
+        closePopup();
+        focusController();
+        customBehaviorTriggered = true;
+        break;
+    }
+
+    if (customBehaviorTriggered) e.preventDefault();
   });
 })();
 
